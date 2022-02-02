@@ -14,22 +14,22 @@ namespace Data
 
     public class StaticData
     {
-        public List<CortexSceneTrait> SceneTestList = new()
+        public List<CortexSceneTrait> SceneTraitList = new()
         {
             new CortexSceneTrait
             {
                 Name = "Patrons",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "Witchlock Pistol",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
                 Name = "Witchlock Rifle",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
@@ -39,12 +39,12 @@ namespace Data
             new CortexSceneTrait
             {
                 Name = "Bandits",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "Information",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
@@ -59,12 +59,12 @@ namespace Data
             new CortexSceneTrait
             {
                 Name = "Soldiers",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "A cure",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
@@ -74,12 +74,12 @@ namespace Data
             new CortexSceneTrait
             {
                 Name = "Worshipers",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "an Idol",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
@@ -89,12 +89,12 @@ namespace Data
             new CortexSceneTrait
             {
                 Name = "Innocents",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
                 Name = "Lightning",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
@@ -104,12 +104,12 @@ namespace Data
             new CortexSceneTrait
             {
                 Name = "Workers",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "Fire",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
@@ -119,52 +119,104 @@ namespace Data
             new CortexSceneTrait
             {
                 Name = "An Official",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "Stranger",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "a Local",
-                Type = "Agents"
+                Type = "Agent"
             },
             new CortexSceneTrait
             {
                 Name = "Water",
-                Type = "Assets"
+                Type = "Asset"
             },
             new CortexSceneTrait
             {
                 Name = "Whiskey",
-                Type = "Assets"
-            }
+                Type = "Asset"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Helpin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Believin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Bossin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Laborin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Fiddlin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Learnin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Fightin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Rushin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Slingin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Occultin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Shankin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Cheatin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Yakkin",
+                Type = "Trait"
+            },
+            new CortexSceneTrait
+            {
+                Name = "Gamblin",
+                Type = "Trait"
+            },
 
         };
     }
 
     public static class StaticDataExtensions
     {
-        public static readonly string[] ShapeDescriptors = new[]
-        {
-            "Helpin",
-            "Believin",
-            "Bossin",
-            "Laborin",
-            "Fiddlin",
-            "Learnin",
-            "Fightin",
-            "Rushin",
-            "Slingin",
-            "Occultin",
-            "Shankin",
-            "Cheatin",
-            "Yakkin",
-            "Gamblin"
-        };
-
         public static string GetShapePath(string descriptor)
         {
             if (string.IsNullOrEmpty(descriptor))

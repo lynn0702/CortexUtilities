@@ -1,0 +1,126 @@
+﻿@page "/traiteditor"
+
+@inject StaticData Data
+
+<p>This page demonstrates how to configure the Razden Blazor DataGrid for inline editing</p>
+
+    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Order" Click="@InsertRow" Disabled=@(traitToInsert != null) />
+    <RadzenDataGrid @ref="traitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data="@Data.SceneTraitList" TItem="CortexSceneTrait" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+        <Columns>
+            <RadzenDataGridColumn TItem="CortexSceneTrait" Property="Name" Title="Name">
+                <EditTemplate Context="order">
+                    <RadzenTextBox @bind-Value="order.Name" Style="width:100%; display: block" Name="Name" />
+                    <RadzenRequiredValidator Text="Name is required" Component="Name" Popup="true" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="CortexSceneTrait" Property="Type" Title="Type" Width="280px" >
+                <EditTemplate Context="order">
+                    <RadzenDropDown @bind-Value="order.Type" Data="@traitTypes" TextProperty="Type" ValueProperty="Type" Style="width:100%; display: block;" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+
+            <RadzenDataGridColumn TItem="CortexSceneTrait" Context="sampleBlazorModelsSampleOrder" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+@*                <Template Context="order">
+                    <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => EditRow(order))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>*@
+                <EditTemplate Context="order">
+                    <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(order))">
+                    </RadzenButton>
+                    <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(order))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="CortexSceneTrait" Context="order" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+                <Template Context="order">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(order))" @onclick:stopPropagation="true">
+                    </RadzenButton>
+                </Template>
+                <EditTemplate Context="order">
+                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(order))">
+                    </RadzenButton>
+                </EditTemplate>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+
+@code {
+    RadzenDataGrid<CortexSceneTrait> traitsGrid;
+
+    string[] traitTypes = new[] {"Title", "Agent", "Asset", "Trait", "Trait"};
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+
+    async Task EditRow(CortexSceneTrait order)
+    {
+        await traitsGrid.EditRow(order);
+    }
+
+    void OnUpdateRow(CortexSceneTrait order)
+    {
+        if (order == traitToInsert)
+        {
+            traitToInsert = null;
+        }
+
+    }
+
+    async Task SaveRow(CortexSceneTrait order)
+    {
+        if (order == traitToInsert)
+        {
+            traitToInsert = null;
+        }
+
+        Data.SceneTraitList.Add(order);
+
+        await traitsGrid.UpdateRow(order);
+    }
+
+    void CancelEdit(CortexSceneTrait order)
+    {
+        if (order == traitToInsert)
+        {
+            traitToInsert = null;
+        }
+
+        traitsGrid.CancelEditRow(order);
+    }
+
+    async Task DeleteRow(CortexSceneTrait order)
+    {
+        if (order == traitToInsert)
+        {
+            traitToInsert = null;
+        }
+
+        if (Data.SceneTraitList.Contains(order))
+        {
+            Data.SceneTraitList.Remove(order);
+
+            await traitsGrid.Reload();
+        }
+        else
+        {
+            traitsGrid.CancelEditRow(order);
+        }
+    }
+
+    CortexSceneTrait traitToInsert;
+
+    async Task InsertRow()
+    {
+        traitToInsert = new CortexSceneTrait();
+        await traitsGrid.InsertRow(traitToInsert);
+    }
+
+    void OnCreateRow(CortexSceneTrait order)
+    {
+        Data.SceneTraitList.Add(order);
+
+    }
+}
