@@ -468,5 +468,10 @@ code {
 
 .clickThrough {
     pointer-events: none;
-    z-index: -1; /*for supporting flipping in Firefox*/
+}
+
+@supports (-moz-appearance:none) {
+    .clickThrough {
+        z-index: -1; /*for supporting flipping in Firefox*/
+    }
 }
