@@ -1,0 +1,174 @@
+﻿@using System.ComponentModel
+@using System.IO.IsolatedStorage
+
+@inject StaticData _sData
+
+<div class="card-container">
+    <div class="card-flip @FlipCss">
+        <div class="sceneCard paleWoodGradient card front " @onclick="FlipMe">
+            @{
+                var settingTraits = Shuffle(StaticDataExtensions.ShapeDescriptors.ToList()).Take(4).ToArray();
+
+                <div class="LeftIcon">
+                    <svg viewBox="0 0 256 256" style="height: 100%;">
+                        <path transform="scale(0.5, 0.5)" stroke-width="8" stroke-opacity="1" stroke="#4a4a4a" fill-opacity="1"
+                              d="@StaticDataExtensions.GetShapePath(settingTraits[0])"
+                              fill="@StaticDataExtensions.GetFillColor(settingTraits[1])">
+                        </path>
+                    </svg>
+                </div>
+
+                <div class="LeftEdge">
+                    @settingTraits[1]
+                </div>
+
+
+            }
+            <div class="SceneTitle">
+                <div class="Top-Edge">
+                    @settingTraits[0]
+                </div>
+
+                <div class="Title-Bar tarotCardTitle">@GetRandomTrait("Title")?.Name</div>
+
+                <div class="Rating-Bar">
+                    @{
+                        var poolSize = _random.Next(2, 7);
+                        var dieSize = _random.Next(3, 7) * 2;
+
+                        for (var i = 0; i < poolSize; i++)
+                        {
+                            <CortexDice die="dieSize"></CortexDice>
+                        }
+                    }
+                </div>
+            </div>
+
+            @{
+                var traitCount = _random.Next(0, 6);
+
+                var traits = GetRandomSceneTraits(new[] {"Agents", "Assets"}, traitCount).ToList();
+
+                for (var i = 0; i < traitCount; i++)
+                {
+                    var rating = _random.Next(3, 7)*2;
+                    <div class="Trait-@(i + 1) grid-auto-col">
+                        <div class="Trait-Header">
+                            <text>@(traits?.ElementAtOrDefault(i)?.Name)</text>
+                            <CortexDice die="rating"></CortexDice>
+                        </div>
+                        
+                        @if (traits?.ElementAtOrDefault(i)?.Type == "Agents")
+                        {
+                        var hasTrait = _random.Next(0, 100) % 2 == 0;
+                        var traitRating = _random.Next(2, 6)*2;
+                        var hasAsset = _random.Next(0, 100) % 2 == 0;
+                        var assetRating = _random.Next(2, 6)*2;
+
+                            <div class="Trait-Footer">
+                            @if (hasTrait)
+                            {
+                                <text>@(settingTraits[_random.Next(0, 4)])</text>
+                                <CortexDice css="diceIconSub" die="traitRating"></CortexDice>
+                            }
+
+                            @if (hasAsset)
+                            {
+                                <text>@(GetRandomTrait("Assets")?.Name)</text>
+                                <CortexDice css="diceIconSub" die="assetRating"></CortexDice>
+                            }
+                        </div>
+                        }
+                    </div>
+                }
+            }
+
+            @{
+                <div class="RightEdge">
+                    @settingTraits[2]
+                </div>
+
+                <div class="BottomEdge">
+                    @settingTraits[3]
+                </div>
+
+                <div class="RightIcon">
+                    <svg viewBox="0 0 256 256" style="height: 100%;">
+                        <path transform="scale(0.5, 0.5)" stroke-width="8" stroke-opacity="1" stroke="#4a4a4a" fill-opacity="1"
+                              d="@StaticDataExtensions.GetShapePath(settingTraits[3])"
+                              fill="@StaticDataExtensions.GetFillColor(settingTraits[2])">
+                        </path>
+                    </svg>
+                </div>
+            }
+        </div>
+    
+        <!-- Card 2 Back -->
+        <div class="sceneCardBack paleWoodGradient card back" hidden="@(!_flipped)" @onclick="FlipMe">
+            <figure style="align-self:center">
+                <img src="images/doorway.svg" alt="door"/>
+            </figure>
+        </div>
+        <!-- End Card 2 Back -->
+
+    </div>
+</div>
+
+@code {
+    Random _random = new Random();
+
+    private IEnumerable<CortexSceneTrait> GetTraitOptions(string type)
+    {
+        if (string.IsNullOrEmpty(type)) return _sData.SceneTestList;
+
+        return _sData.SceneTestList.Where(t => t.Type == type);
+    }
+
+    public CortexSceneTrait? GetRandomTrait(string type)
+    {
+        if (_sData.SceneTestList == null) return new CortexSceneTrait
+        {
+            Name = "List Empty"
+        };
+
+        var c = _sData.SceneTestList.Count == 0 ? 0 : _sData.SceneTestList.Count - 1;
+
+        if (string.IsNullOrEmpty(type)) return _sData.SceneTestList.ElementAtOrDefault(_random.Next(0,c));
+
+        var list = _sData.SceneTestList.Where(t => t.Type == type).ToArray();
+        c = !list.Any() ? 0 : list.Count() - 1;
+
+        return list.ElementAtOrDefault(_random.Next( 0, c));
+    }
+
+    private IEnumerable<CortexSceneTrait> GetRandomSceneTraits(string[] types, int count)
+    {
+        if (_sData.SceneTestList == null) return new List<CortexSceneTrait>();
+
+        var list = Shuffle(_sData.SceneTestList);
+        if (types.Length == 0) return list.Take(count);
+
+        return _sData.SceneTestList.Where(t => types.Contains( t.Type)).Take(count);
+    }
+
+    private IList<T> Shuffle<T>( IList<T> list)  
+    {  
+        var n = list.Count;  
+        while (n > 1) {  
+            n--;  
+            var k = _random.Next(n + 1);  
+            (list[k], list[n]) = (list[n], list[k]);
+        }
+        return list;
+    }
+
+    bool _flipped = true;
+    public void FlipMe()
+    {
+        _flipped = !_flipped;
+        StateHasChanged();
+    }
+    string FlipCss => _flipped ? "im-flipped" : "";
+
+}
+

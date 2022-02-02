@@ -195,3 +195,273 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.diceIcon {
+    width: 2rem;
+    margin: 0;
+}
+
+.diceIconSub {
+    width: 1.8rem!important;
+    margin: 0;
+}
+
+.card-container {
+    display: grid;
+    max-height: 840px;
+    max-width: 600px;
+    min-height: 420px;
+    min-width: 300px;
+    perspective: 700px;
+}
+
+.card-flip {
+    display: grid;
+    justify-items: center;
+    grid-template: 1fr / 1fr;
+    grid-template-areas: "frontAndBack";
+    transform-style: preserve-3d;
+    transition: all 0.7s ease;
+}
+
+.front {
+    grid-area: frontAndBack;
+}
+
+.back {
+    grid-area: frontAndBack;
+    transform: rotateY(-180deg);
+}
+
+.Trait-1 {
+    grid-area: Trait-1;
+}
+
+.Trait-2 {
+    grid-area: Trait-2;
+}
+
+.Trait-3 {
+    grid-area: Trait-3;
+}
+
+.Trait-4 {
+    grid-area: Trait-4;
+}
+
+.Trait-5 {
+    grid-area: Trait-5;
+}
+
+.Trait-4 {
+    grid-area: 6 / 2 / 7 / 6;
+}
+
+.Trait-5 {
+    grid-area: 7 / 2 / 8 / 6;
+}
+
+.Trait-1, .Trait-2, .Trait-3, .Trait-4, .Trait-5 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-areas:
+                       "Trait-Header"
+                       "Trait-Footer";
+}
+
+.Rating-Bar {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(35px, auto);
+    justify-self: center;
+    align-self: center;
+}
+
+.LeftIcon {
+    justify-self: right;
+    align-self: center;
+    grid-area: LeftIcon;
+    height: 1.8em;
+}
+
+.RightIcon {
+    justify-self: start;
+    align-self: center;
+    grid-area: RightIcon;
+    height: 1.8em;
+}
+
+.sceneCard {
+    max-height: 420px;
+    max-width: 300px;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    display: grid;
+    aspect-ratio: 2.5/3.5;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+    gap: 0.1em 0em;
+    align-items: baseline;
+    grid-auto-flow: row;
+    grid-template-areas:
+        "LeftIcon PokerCardTitle PokerCardTitle PokerCardTitle PokerCardTitle ."
+        ". PoolRating PoolRating PoolRating PoolRating ."
+        ". Trait-1 Trait-1 Trait-1 Trait-1-Rating ."
+        ". Trait-2 Trait-2 Trait-2 Trait-2-Rating ."
+        ". Trait-3 Trait-3 Trait-3 Trait-3-Rating ."
+        ". Trait-4 Trait-4 Trait-4 Trait-4-Rating ."
+        ". Trait-5 Trait-5 Trait-5 Trait-5-Rating ."
+        ". . . . . RightIcon";
+
+    border: 2px solid black;
+    border-radius: 15%;
+}
+
+.paleWoodGradient {
+    background: #eacda3; /* fallback for old browsers */
+    background: linear-gradient(to bottom, #eacda3, #d6ae7b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+
+.Top-Edge {
+    /*    grid-area: 1 / 2 / 2 / 6;*/
+    letter-spacing: 0.4em;
+    padding-left: 1em;
+    text-decoration: underline;
+    align-self: end;
+}
+
+.LeftEdge {
+    margin-left: 0.5em;
+    justify-self: start;
+    align-self: end;
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: min-content;
+    row-gap: 1px;
+    grid-area: 2 / 1 / 8 / 2;
+    width: 50%;
+    height: 100%;
+    writing-mode: vertical-rl;
+    text-align: right;
+    transform: rotate(180deg);
+    letter-spacing: 0.4em;
+    text-decoration: underline;
+}
+
+.RightEdge {
+    justify-self: end;
+    align-self: end;
+    margin-right: 0.5em;
+    grid-area: 2 / 6 / 8 / 7;
+    width: 50%;
+    display: grid;
+    grid-auto-flow: row;
+    grid-auto-rows: min-content;
+    row-gap: 1px;
+    writing-mode: vertical-rl;
+    text-align: right;
+    transform: rotate(180deg);
+    letter-spacing: 0.4em;
+    text-decoration: overline;
+}
+
+.BottomEdge {
+    justify-self: end;
+    align-self: end;
+    grid-area: 8 / 2 / 9 / 6;
+    text-decoration: overline;
+    letter-spacing: 0.4em;
+    padding-right: 1em;
+}
+
+.im-flipped {
+    transform: rotateY(180deg);
+}
+
+.sceneCardBack {
+    max-height: 420px;
+    max-width: 300px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    display: grid;
+    aspect-ratio: 2.5/3.5;
+    gap: 0.2em 0em;
+    grid-auto-flow: row;
+    border: 2px solid black;
+    border-radius: 15%;
+    justify-self: center;
+    align-self: center;
+}
+
+.SceneTitle {
+    display: grid;
+    align-self: start;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        "Top-Edge"
+        "Title-Bar"
+        "Rating-Bar";
+    grid-area: 1 / 2 / 3 / 6;
+}
+
+.Title-Bar {
+    justify-self: center;
+    grid-area: Title-Bar;
+}
+
+.Rating-Bar {
+    justify-self: center;
+    align-self: center;
+    grid-area: Rating-Bar;
+}
+
+.Trait-Header {
+    grid-area: Trait-Header;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-self: start;
+    align-self: start;
+    font-size: .9rem;
+    font-weight: bold;
+}
+
+.Trait-Footer {
+    grid-area: Trait-Footer;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-self: end;
+    align-self: center;
+    font-style: italic;
+    font-size: .85rem;
+    width: 95%;
+}
+
+
+.tarotCardTitle {
+    text-anchor: middle;
+    text-align: center;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 1.3REM;
+    font-family: "Palatino Linotype", Trebuchet MS, Verdana, sans-serif;
+    text-align-last: center;
+    color: black;
+}
+
+.p-1 {
+    padding: 0.25rem !important;
+}

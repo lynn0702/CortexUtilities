@@ -1,0 +1,102 @@
+[
+  {
+    "Name": "Patrons",
+    "Type": "Agents"
+  },
+  {
+    "Name": "Witchlok Pistol",
+    "Type": "Assets"
+  },
+  {
+    "Name": "Witchlok Rifle",
+    "Type": "Assets"
+  },
+  {
+    "Name": "In the Mines",
+    "Type": "Title"
+  },
+  {
+    "Name": "Bandits",
+    "Type": "Agents"
+  },
+  {
+    "Name": "Information",
+    "Type": "Assets"
+  },
+  {
+    "Name": "On the Train",
+    "Type": "Title"
+  },
+  {
+    "Name": "Off World",
+    "Type": "Title"
+  },
+  {
+    "Name": "Soldiers",
+    "Type": "Agents"
+  },
+  {
+    "Name": "A cure",
+    "Type": "Assets"
+  },
+  {
+    "Name": "Between Worlds",
+    "Type": "Title"
+  },
+  {
+    "Name": "Worshipers",
+    "Type": "Agents"
+  },
+  {
+    "Name": "an Idol",
+    "Type": "Assets"
+  },
+  {
+    "Name": "In the Desert",
+    "Type": "Title"
+  },
+  {
+    "Name": "Innocents",
+    "Type": "Assets"
+  },
+  {
+    "Name": "Lightning",
+    "Type": "Assets"
+  },
+  {
+    "Name": "At the Saloon",
+    "Type": "Title"
+  },
+  {
+    "Name": "Workers",
+    "Type": "Agents"
+  },
+  {
+    "Name": "Fire",
+    "Type": "Assets"
+  },
+  {
+    "Name": "Leaving the Station",
+    "Type": "Title"
+  },
+  {
+    "Name": "An Official",
+    "Type": "Agents"
+  },
+  {
+    "Name": "Stranger",
+    "Type": "Agents"
+  },
+  {
+    "Name": "a Local",
+    "Type": "Agents"
+  },
+  {
+    "Name": "Water",
+    "Type": "Assets"
+  },
+  {
+    "Name": "Whiskey",
+    "Type": "Assets"
+  }
+]

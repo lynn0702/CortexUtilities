@@ -1,0 +1,57 @@
+﻿@page "/scenecards"
+@using Client.Components
+
+
+@inject HttpClient Http
+@inject StaticData SData
+
+
+<div id=""SceneCardDemo>
+    <div class="row p-1">
+        <button @onclick="Refresh">Flip All</button>
+    </div>
+    <div class="grid-3-col">
+        @for(var i = 0; i <9; i++)
+        {
+            var k = i;
+            <CortexSceneCard @ref="_cards[k]"></CortexSceneCard>
+        }
+    </div>
+</div>
+
+
+@code {
+    readonly CortexSceneCard[] _cards = new CortexSceneCard[9];
+
+    protected override async Task OnInitializedAsync()
+    {
+        //if (SData?.SceneTestList?.Count == null || SData?.SceneTestList?.Count <= 0)
+        //{
+        //    SData.SceneTestList = await Http.GetFromJsonAsync<List<CortexSceneTrait>>("SupportData/scenetest.json");
+        //}
+
+    }
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to the StateChanged EventHandler
+        //CharacterState.StateChanged +=
+        //    OnCounterStateAdvancedStateChanged;
+    }
+    // This method is fired when the CounterState object
+    // invokes its StateHasChanged() method
+    // This will cause this control to invoke its own
+    // StateHasChanged() method refreshing the page
+    // and displaying the updated counter value
+    void OnCounterStateAdvancedStateChanged(
+        object sender, EventArgs e) => StateHasChanged();
+
+    private void Refresh()
+    {
+        foreach (var cortexSceneCard in _cards)
+        {
+            cortexSceneCard.FlipMe();
+        }
+    }
+
+}
