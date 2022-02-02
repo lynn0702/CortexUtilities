@@ -7,8 +7,9 @@
 
 
 <div id=""SceneCardDemo>
-    <div class="row p-1">
+    <div class="p-1">
         <button @onclick="Refresh">Flip All</button>
+        <button @onclick="Redraw">Redraw All</button>
     </div>
     <div class="grid-3-col">
         @for(var i = 0; i <9; i++)
@@ -51,6 +52,14 @@
         foreach (var cortexSceneCard in _cards)
         {
             cortexSceneCard.FlipMe();
+        }
+    }
+
+    private void Redraw()
+    {
+        foreach (var cortexSceneCard in _cards)
+        {
+            cortexSceneCard.ReGenerate();
         }
     }
 

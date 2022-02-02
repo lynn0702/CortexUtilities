@@ -303,6 +303,7 @@ code {
     max-width: 300px;
     padding: 0px;
     margin: 0px;
+    width: 100%;
     box-sizing: border-box;
     display: grid;
     aspect-ratio: 2.5/3.5;
@@ -320,7 +321,6 @@ code {
         ". Trait-4 Trait-4 Trait-4 Trait-4-Rating ."
         ". Trait-5 Trait-5 Trait-5 Trait-5-Rating ."
         ". . . . . RightIcon";
-
     border: 2px solid black;
     border-radius: 15%;
 }

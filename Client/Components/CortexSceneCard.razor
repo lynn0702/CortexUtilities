@@ -1,5 +1,6 @@
 ﻿@using System.ComponentModel
 @using System.IO.IsolatedStorage
+@using System.CodeDom.Compiler
 
 @inject StaticData _sData
 
@@ -7,75 +8,58 @@
     <div class="card-flip @FlipCss">
         <div class="sceneCard paleWoodGradient card front " @onclick="FlipMe">
             @{
-                var settingTraits = Shuffle(StaticDataExtensions.ShapeDescriptors.ToList()).Take(4).ToArray();
-
                 <div class="LeftIcon">
                     <svg viewBox="0 0 256 256" style="height: 100%;">
                         <path transform="scale(0.5, 0.5)" stroke-width="8" stroke-opacity="1" stroke="#4a4a4a" fill-opacity="1"
-                              d="@StaticDataExtensions.GetShapePath(settingTraits[0])"
-                              fill="@StaticDataExtensions.GetFillColor(settingTraits[1])">
+                              d="@StaticDataExtensions.GetShapePath(Scene.SettingTraits[0])"
+                              fill="@StaticDataExtensions.GetFillColor(Scene.SettingTraits[1])">
                         </path>
                     </svg>
                 </div>
 
                 <div class="LeftEdge">
-                    @settingTraits[1]
+                    @Scene.SettingTraits[1]
                 </div>
-
-
             }
             <div class="SceneTitle">
                 <div class="Top-Edge">
-                    @settingTraits[0]
+                    @Scene.SettingTraits[0]
                 </div>
 
-                <div class="Title-Bar tarotCardTitle">@GetRandomTrait("Title")?.Name</div>
+                <div class="Title-Bar tarotCardTitle">@Scene.Title</div>
 
                 <div class="Rating-Bar">
                     @{
-                        var poolSize = _random.Next(2, 7);
-                        var dieSize = _random.Next(3, 7) * 2;
-
-                        for (var i = 0; i < poolSize; i++)
+                        for (var i = 0; i < Scene.PoolQuantity; i++)
                         {
-                            <CortexDice die="dieSize"></CortexDice>
+                            <CortexDice die="Scene.PoolDieSize"></CortexDice>
                         }
                     }
                 </div>
             </div>
 
             @{
-                var traitCount = _random.Next(0, 6);
-
-                var traits = GetRandomSceneTraits(new[] {"Agents", "Assets"}, traitCount).ToList();
-
-                for (var i = 0; i < traitCount; i++)
+                for (var i = 0; i < Scene.TraitCount; i++)
                 {
-                    var rating = _random.Next(3, 7)*2;
                     <div class="Trait-@(i + 1) grid-auto-col">
                         <div class="Trait-Header">
-                            <text>@(traits?.ElementAtOrDefault(i)?.Name)</text>
-                            <CortexDice die="rating"></CortexDice>
+                            <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.Name)</text>
+                            <CortexDice die="Scene.SceneTraits?.ElementAtOrDefault(i)?.Rating ?? 0"></CortexDice>
                         </div>
                         
-                        @if (traits?.ElementAtOrDefault(i)?.Type == "Agents")
+                        @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.Type == "Agents")
                         {
-                        var hasTrait = _random.Next(0, 100) % 2 == 0;
-                        var traitRating = _random.Next(2, 6)*2;
-                        var hasAsset = _random.Next(0, 100) % 2 == 0;
-                        var assetRating = _random.Next(2, 6)*2;
-
                             <div class="Trait-Footer">
-                            @if (hasTrait)
+                            @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.HasTrait == true)
                             {
-                                <text>@(settingTraits[_random.Next(0, 4)])</text>
-                                <CortexDice css="diceIconSub" die="traitRating"></CortexDice>
+                                <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.TraitName)</text>
+                                <CortexDice css="diceIconSub" die="Scene.SceneTraits?.ElementAtOrDefault(i)?.TraitRating ?? 0"></CortexDice>
                             }
 
-                            @if (hasAsset)
+                            @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.HasAsset == true)
                             {
-                                <text>@(GetRandomTrait("Assets")?.Name)</text>
-                                <CortexDice css="diceIconSub" die="assetRating"></CortexDice>
+                                <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.AssetName)</text>
+                                <CortexDice css="diceIconSub" die="Scene.SceneTraits?.ElementAtOrDefault(i)?.AssetRating ?? 0"></CortexDice>
                             }
                         </div>
                         }
@@ -85,43 +69,51 @@
 
             @{
                 <div class="RightEdge">
-                    @settingTraits[2]
+                    @Scene.SettingTraits[2]
                 </div>
 
                 <div class="BottomEdge">
-                    @settingTraits[3]
+                    @Scene.SettingTraits[3]
                 </div>
 
                 <div class="RightIcon">
                     <svg viewBox="0 0 256 256" style="height: 100%;">
                         <path transform="scale(0.5, 0.5)" stroke-width="8" stroke-opacity="1" stroke="#4a4a4a" fill-opacity="1"
-                              d="@StaticDataExtensions.GetShapePath(settingTraits[3])"
-                              fill="@StaticDataExtensions.GetFillColor(settingTraits[2])">
+                              d="@StaticDataExtensions.GetShapePath(Scene.SettingTraits[3])"
+                              fill="@StaticDataExtensions.GetFillColor(Scene.SettingTraits[2])">
                         </path>
                     </svg>
                 </div>
             }
         </div>
     
-        <!-- Card 2 Back -->
-        <div class="sceneCardBack paleWoodGradient card back" hidden="@(!_flipped)" @onclick="FlipMe">
-            <figure style="align-self:center">
-                <img src="images/doorway.svg" alt="door"/>
-            </figure>
-        </div>
-        <!-- End Card 2 Back -->
+        @if (_flipped)
+        {
+            <!-- Card 2 Back -->
+            <div class="sceneCardBack paleWoodGradient card back " @onclick="FlipMe">
+                <figure style="align-self:center">
+                    <img src="images/doorway.svg" alt="door"/>
+                </figure>
+            </div>
+            <!-- End Card 2 Back -->
+        }
 
     </div>
 </div>
 
 @code {
     Random _random = new Random();
+    CortexScene Scene { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Scene = Generate();
+        base.OnInitialized();
+    }
 
     private IEnumerable<CortexSceneTrait> GetTraitOptions(string type)
     {
-        if (string.IsNullOrEmpty(type)) return _sData.SceneTestList;
-
-        return _sData.SceneTestList.Where(t => t.Type == type);
+        return string.IsNullOrEmpty(type) ? _sData.SceneTestList : _sData.SceneTestList.Where(t => t.Type == type);
     }
 
     public CortexSceneTrait? GetRandomTrait(string type)
@@ -145,21 +137,9 @@
     {
         if (_sData.SceneTestList == null) return new List<CortexSceneTrait>();
 
-        var list = Shuffle(_sData.SceneTestList);
-        if (types.Length == 0) return list.Take(count);
-
-        return _sData.SceneTestList.Where(t => types.Contains( t.Type)).Take(count);
-    }
-
-    private IList<T> Shuffle<T>( IList<T> list)  
-    {  
-        var n = list.Count;  
-        while (n > 1) {  
-            n--;  
-            var k = _random.Next(n + 1);  
-            (list[k], list[n]) = (list[n], list[k]);
-        }
-        return list;
+        return types.Length == 0 
+            ? _sData.SceneTestList.GetRandomElements(count) 
+            : _sData.SceneTestList.Where(t => types.Contains( t.Type)).GetRandomElements(count);
     }
 
     bool _flipped = true;
@@ -169,6 +149,50 @@
         StateHasChanged();
     }
     string FlipCss => _flipped ? "im-flipped" : "";
+
+    public CortexScene Generate()
+    {
+        var scene = new CortexScene
+        {
+            Title = GetRandomTrait("Title")?.Name,
+            TraitCount = _random.Next(0, 6),
+            PoolQuantity = _random.Next(2, 7),
+            PoolDieSize = _random.Next(3, 7) * 2,
+            SettingTraits = StaticDataExtensions.ShapeDescriptors.ToList().GetRandomElements(4).ToArray()
+        };
+        scene.SceneTraits = GetRandomSceneTraits(new[] {"Agents", "Assets"}, scene.TraitCount).ToList();
+
+
+        foreach (var cortexSceneTrait in scene.SceneTraits)
+        {
+             cortexSceneTrait.Rating  = _random.Next(3, 7)*2;
+             cortexSceneTrait.HasTrait = _random.Next(0, 2) == 0;
+             cortexSceneTrait.TraitRating = _random.Next(2, 7)*2;
+             cortexSceneTrait.HasAsset = _random.Next(0, 2)  == 0;
+             cortexSceneTrait.AssetRating = _random.Next(2, 7)*2;
+
+            var traitRandomizer = _random.Next(0, 5);
+
+            if (traitRandomizer > scene.SettingTraits?.Length)
+            {
+                var test = "how in te world??";
+            }
+            else
+            {
+                cortexSceneTrait.TraitName = scene.SettingTraits[_random.Next(0, 4)];
+            }
+             
+            cortexSceneTrait.AssetName = GetRandomTrait("Assets")?.Name;
+        }
+
+        return scene;
+    }
+
+    public void ReGenerate()
+    {
+        Scene = Generate();
+        StateHasChanged();
+    }
 
 }
 

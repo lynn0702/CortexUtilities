@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Data
 {
@@ -10,6 +6,21 @@ namespace Data
     {
         public string Name { get; set; }
         public string Type { get; set; }
+
+        public int Rating { get; set; }
+
+        public bool HasTrait { get; set; }
+
+        public int TraitRating { get; set; }
+
+        public string TraitName { get; set; }
+
+        public bool HasAsset { get; set; }
+
+        public int AssetRating { get; set; }
+
+        public string AssetName { get; set; }
+
 
         public CortexSceneTrait()
         {
