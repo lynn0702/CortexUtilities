@@ -198,508 +198,514 @@ code {
 
 .grid-3-col {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 1fr;
     gap: 10px;
 }
 
-.diceIcon {
-    width: 2rem;
-    margin: 0;
-    z-index: 2;
-}
-
-.diceIconSub {
-    width: 1.8rem!important;
-    margin: 0;
-}
-
-.card-container {
-    display: grid;
-    max-height: 840px;
-    max-width: 600px;
-    min-height: 420px;
-    min-width: 300px;
-
-}
-
-.card-flip {
-    display: grid;
-    justify-items: center;
-    grid-template: 1fr / 1fr;
-    grid-template-areas: "frontAndBack";
-    transform-style: preserve-3d;
-    transition: all 0.7s ease;
-}
-
-.front {
-    grid-area: frontAndBack;
-}
-
-.back {
-    grid-area: frontAndBack;
-    transform: rotateY(-180deg);
-}
-
-.Trait-1 {
-    grid-area: Trait-1;
-}
-
-.Trait-2 {
-    grid-area: Trait-2;
-}
-
-.Trait-3 {
-    grid-area: Trait-3;
-}
-
-.Trait-4 {
-    grid-area: Trait-4;
-}
-
-.Trait-5 {
-    grid-area: Trait-5;
-}
-
-.Trait-4 {
-    grid-area: 6 / 2 / 7 / 6;
-}
-
-.Trait-5 {
-    grid-area: 7 / 2 / 8 / 6;
-}
-
-.Trait-1, .Trait-2, .Trait-3, .Trait-4, .Trait-5 {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(2, 1fr);
-    grid-template-areas:
-                       "Trait-Header"
-                       "Trait-Footer";
-}
-
-.Rating-Bar {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: minmax(35px, auto);
-    justify-self: center;
-    align-self: center;
-}
-
-.LeftIcon {
-    justify-self: right;
-    align-self: center;
-    grid-area: LeftIcon;
-    height: 1.8em;
-}
-
-.RightIcon {
-    justify-self: start;
-    align-self: center;
-    grid-area: RightIcon;
-    height: 1.8em;
-}
-
-.sceneCard {
-    max-height: 420px;
-    max-width: 300px;
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
-    box-sizing: border-box;
-    display: grid;
-    aspect-ratio: 2.5/3.5;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(8, minmax(0, 1fr));
-    gap: 0.1em 0em;
-    align-items: baseline;
-    grid-auto-flow: row;
-    grid-template-areas:
-        "LeftIcon PokerCardTitle PokerCardTitle PokerCardTitle PokerCardTitle ."
-        ". PoolRating PoolRating PoolRating PoolRating ."
-        ". Trait-1 Trait-1 Trait-1 Trait-1-Rating ."
-        ". Trait-2 Trait-2 Trait-2 Trait-2-Rating ."
-        ". Trait-3 Trait-3 Trait-3 Trait-3-Rating ."
-        ". Trait-4 Trait-4 Trait-4 Trait-4-Rating ."
-        ". Trait-5 Trait-5 Trait-5 Trait-5-Rating ."
-        ". . . . . RightIcon";
-    border: 2px solid black;
-    border-radius: 15%;
-}
-
-.paleWoodGradient {
-    background: #eacda3; /* fallback for old browsers */
-    background: linear-gradient(to bottom, #eacda3, #d6ae7b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-}
-
-
-.Top-Edge {
-    /*    grid-area: 1 / 2 / 2 / 6;*/
-    letter-spacing: 0.4em;
-    padding-left: 1em;
-    text-decoration: underline;
-    align-self: end;
-}
-
-.LeftEdge {
-    margin-left: 0.5em;
-    justify-self: start;
-    align-self: end;
-    display: grid;
-    grid-auto-flow: row;
-    grid-auto-rows: min-content;
-    row-gap: 1px;
-    grid-area: 2 / 1 / 8 / 2;
-    width: 50%;
-    height: 100%;
-    writing-mode: vertical-rl;
-    text-align: right;
-    transform: rotate(180deg);
-    letter-spacing: 0.4em;
-    text-decoration: underline;
-}
-
-.RightEdge {
-    justify-self: end;
-    align-self: end;
-    margin-right: 0.5em;
-    grid-area: 2 / 6 / 8 / 7;
-    width: 50%;
-    display: grid;
-    grid-auto-flow: row;
-    grid-auto-rows: min-content;
-    row-gap: 1px;
-    writing-mode: vertical-rl;
-    text-align: right;
-    transform: rotate(180deg);
-    letter-spacing: 0.4em;
-    text-decoration: overline;
-}
-
-.BottomEdge {
-    justify-self: end;
-    align-self: end;
-    grid-area: 8 / 2 / 9 / 6;
-    text-decoration: overline;
-    letter-spacing: 0.4em;
-    padding-right: 1em;
-}
-
-.im-flipped {
-    transform: rotateY(180deg);
-}
-
-.sceneCardBack {
-    max-height: 420px;
-    max-width: 300px;
-    width: 100%;
-    padding: 0px;
-    margin: 0px;
-    box-sizing: border-box;
-    display: grid;
-    aspect-ratio: 2.5/3.5;
-    gap: 0.2em 0em;
-    grid-auto-flow: row;
-    border: 2px solid black;
-    border-radius: 15%;
-    justify-self: center;
-    align-self: center;
-}
-
-.SceneTitle {
-    display: grid;
-    align-self: start;
-    grid-template-columns: 1fr;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-areas:
-        "Top-Edge"
-        "Title-Bar"
-        "Rating-Bar";
-    grid-area: 1 / 2 / 3 / 6;
-}
-
-.Title-Bar {
-    justify-self: center;
-    grid-area: Title-Bar;
-}
-
-.Rating-Bar {
-    justify-self: center;
-    align-self: center;
-    grid-area: Rating-Bar;
-}
-
-.Trait-Header {
-    grid-area: Trait-Header;
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    justify-self: start;
-    align-self: start;
-    font-size: .9rem;
-    font-weight: bold;
-}
-
-.Trait-Footer {
-    grid-area: Trait-Footer;
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    justify-self: end;
-    align-self: center;
-    font-style: italic;
-    font-size: .85rem;
-    width: 95%;
-}
-
-
-.tarotCardTitle {
-    text-anchor: middle;
-    text-align: center;
-    font-style: italic;
-    font-weight: bolder;
-    font-size: 1.3REM;
-    font-family: "Palatino Linotype", Trebuchet MS, Verdana, sans-serif;
-    text-align-last: center;
-    color: black;
-}
-
-.p-1 {
-    padding: 0.25rem !important;
-}
-
-.clickThrough {
-    pointer-events: none;
-}
-
-@supports (-moz-appearance:none) {
-    .clickThrough {
-        z-index: -1; /*for supporting flipping in Firefox*/
+@media only screen and (min-width: 768px) {
+    .grid-3-col {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
     }
 }
+.diceIcon {
+        width: 2rem;
+        margin: 0;
+        z-index: 2;
+    }
 
-.large {
-    width: 4rem;
-}
+    .diceIconSub {
+        width: 1.8rem !important;
+        margin: 0;
+    }
 
-.advancedDice {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 2fr 1fr;
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-        "stepUp advancedDiceIcon stepDown"
-        "removeDice setDice addDice";
-    width: fit-content;
-}
+    .card-container {
+        display: grid;
+        max-height: 840px;
+        max-width: 600px;
+        min-height: 420px;
+        min-width: 300px;
+    }
 
-.stepUp {
-    justify-self: end;
-    align-self: end;
-    grid-area: stepUp;
-}
+    .card-flip {
+        display: grid;
+        justify-items: center;
+        grid-template: 1fr / 1fr;
+        grid-template-areas: "frontAndBack";
+        transform-style: preserve-3d;
+        transition: all 0.7s ease;
+    }
 
-.stepDown {
-    justify-self: start;
-    align-self: end;
-    grid-area: stepDown;
-}
+    .front {
+        grid-area: frontAndBack;
+    }
 
-.advancedDiceIcon {
-    grid-area: advancedDiceIcon;
-    grid-area: advancedDiceIcon;
-    width: 4rem;
-    justify-self: center;
-    align-self: end;
-}
+    .back {
+        grid-area: frontAndBack;
+        transform: rotateY(-180deg);
+    }
 
-.setDice {
-    grid-area: setDice;
-    justify-self: center;
-    font-size: .8rem;
-}
+    .Trait-1 {
+        grid-area: Trait-1;
+    }
 
-.addDice {
-    justify-self: start;
-    grid-area: addDice;
-}
+    .Trait-2 {
+        grid-area: Trait-2;
+    }
 
-.removeDice {
-    justify-self: end;
-    grid-area: removeDice;
-}
+    .Trait-3 {
+        grid-area: Trait-3;
+    }
 
-/* Tooltip container */
-.tooltip {
-    position: relative;
-    display: inline-block;
-}
+    .Trait-4 {
+        grid-area: Trait-4;
+    }
 
-.tooltip-top {
-    bottom: 125%;
-    left: 50%;
-    margin-left: -60px;
-}
+    .Trait-5 {
+        grid-area: Trait-5;
+    }
+
+    .Trait-4 {
+        grid-area: 6 / 2 / 7 / 6;
+    }
+
+    .Trait-5 {
+        grid-area: 7 / 2 / 8 / 6;
+    }
+
+    .Trait-1, .Trait-2, .Trait-3, .Trait-4, .Trait-5 {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(2, 1fr);
+        grid-template-areas:
+            "Trait-Header"
+            "Trait-Footer";
+    }
+
+    .Rating-Bar {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(35px, auto);
+        justify-self: center;
+        align-self: center;
+    }
+
+    .LeftIcon {
+        justify-self: right;
+        align-self: center;
+        grid-area: LeftIcon;
+        height: 1.8em;
+    }
+
+    .RightIcon {
+        justify-self: start;
+        align-self: center;
+        grid-area: RightIcon;
+        height: 1.8em;
+    }
+
+    .sceneCard {
+        max-height: 420px;
+        max-width: 300px;
+        padding: 0px;
+        margin: 0px;
+        width: 100%;
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(8, minmax(0, 1fr));
+        gap: 0.1em 0em;
+        align-items: baseline;
+        grid-auto-flow: row;
+        grid-template-areas:
+            "LeftIcon PokerCardTitle PokerCardTitle PokerCardTitle PokerCardTitle ."
+            ". PoolRating PoolRating PoolRating PoolRating ."
+            ". Trait-1 Trait-1 Trait-1 Trait-1-Rating ."
+            ". Trait-2 Trait-2 Trait-2 Trait-2-Rating ."
+            ". Trait-3 Trait-3 Trait-3 Trait-3-Rating ."
+            ". Trait-4 Trait-4 Trait-4 Trait-4-Rating ."
+            ". Trait-5 Trait-5 Trait-5 Trait-5-Rating ."
+            ". . . . . RightIcon";
+        border: 2px solid black;
+        border-radius: 5%;
+    }
+
+    .paleWoodGradient {
+        background: #eacda3; /* fallback for old browsers */
+        background: linear-gradient(to bottom, #eacda3, #d6ae7b); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+
+    .Top-Edge {
+        /*    grid-area: 1 / 2 / 2 / 6;*/
+        letter-spacing: 0.4em;
+        padding-left: 1em;
+        text-decoration: underline;
+        align-self: end;
+    }
+
+    .LeftEdge {
+        margin-left: 0.5em;
+        justify-self: start;
+        align-self: end;
+        display: grid;
+        grid-auto-flow: row;
+        grid-auto-rows: min-content;
+        row-gap: 1px;
+        grid-area: 2 / 1 / 8 / 2;
+        width: 50%;
+        height: 100%;
+        writing-mode: vertical-rl;
+        text-align: right;
+        transform: rotate(180deg);
+        letter-spacing: 0.4em;
+        text-decoration: underline;
+    }
+
+    .RightEdge {
+        justify-self: end;
+        align-self: end;
+        margin-right: 0.5em;
+        grid-area: 2 / 6 / 8 / 7;
+        width: 50%;
+        display: grid;
+        grid-auto-flow: row;
+        grid-auto-rows: min-content;
+        row-gap: 1px;
+        writing-mode: vertical-rl;
+        text-align: right;
+        transform: rotate(180deg);
+        letter-spacing: 0.4em;
+        text-decoration: overline;
+    }
+
+    .BottomEdge {
+        justify-self: end;
+        align-self: end;
+        grid-area: 8 / 2 / 9 / 6;
+        text-decoration: overline;
+        letter-spacing: 0.4em;
+        padding-right: 1em;
+    }
+
+    .im-flipped {
+        transform: rotateY(180deg);
+    }
+
+    .sceneCardBack {
+        max-height: 420px;
+        max-width: 300px;
+        width: 100%;
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+        display: grid;
+        gap: 0.2em 0em;
+        grid-auto-flow: row;
+        border: 2px solid black;
+        border-radius: 5%;
+        justify-self: center;
+        align-self: center;
+    }
+
+    .SceneTitle {
+        display: grid;
+        align-self: start;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, 1fr);
+        grid-template-areas:
+            "Top-Edge"
+            "Title-Bar"
+            "Rating-Bar";
+        grid-area: 1 / 2 / 3 / 6;
+    }
+
+    .Title-Bar {
+        justify-self: center;
+        grid-area: Title-Bar;
+    }
+
+    .Rating-Bar {
+        justify-self: center;
+        align-self: center;
+        grid-area: Rating-Bar;
+    }
+
+    .Trait-Header {
+        grid-area: Trait-Header;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        justify-self: start;
+        align-self: start;
+        font-size: .9rem;
+        font-weight: bold;
+    }
+
+    .Trait-Footer {
+        grid-area: Trait-Footer;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+        justify-self: end;
+        align-self: center;
+        font-style: italic;
+        font-size: .85rem;
+        width: 95%;
+    }
+
+
+    .tarotCardTitle {
+        text-anchor: middle;
+        text-align: center;
+        font-style: italic;
+        font-weight: bolder;
+        font-size: 1.3REM;
+        font-family: "Palatino Linotype", Trebuchet MS, Verdana, sans-serif;
+        text-align-last: center;
+        color: black;
+    }
+
+    .p-1 {
+        padding: 0.25rem !important;
+    }
+
+    .clickThrough {
+        pointer-events: none;
+    }
+
+    @supports (-moz-appearance:none) {
+        .clickThrough {
+            z-index: -1; /*for supporting flipping in Firefox*/
+        }
+    }
+
+    .large {
+        width: 4rem;
+    }
+
+    .advancedDice {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-rows: 2fr 1fr;
+        gap: 0px 0px;
+        grid-auto-flow: row;
+        grid-template-areas:
+            "stepUp advancedDiceIcon stepDown"
+            "removeDice setDice addDice";
+        width: fit-content;
+    }
+
+    .stepUp {
+        justify-self: end;
+        align-self: end;
+        grid-area: stepUp;
+    }
+
+    .stepDown {
+        justify-self: start;
+        align-self: end;
+        grid-area: stepDown;
+    }
+
+    .advancedDiceIcon {
+        grid-area: advancedDiceIcon;
+        grid-area: advancedDiceIcon;
+        width: 4rem;
+        justify-self: center;
+        align-self: end;
+    }
+
+    .setDice {
+        grid-area: setDice;
+        justify-self: center;
+        font-size: .8rem;
+    }
+
+    .addDice {
+        justify-self: start;
+        grid-area: addDice;
+    }
+
+    .removeDice {
+        justify-self: end;
+        grid-area: removeDice;
+    }
+
+    /* Tooltip container */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip-top {
+        bottom: 125%;
+        left: 50%;
+        margin-left: -60px;
+    }
 
     /* Tooltip text */
     .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    /* Position the tooltip text - see examples below! */
-    position: absolute;
-    z-index: 1;
-}
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 6px;
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 1;
+    }
 
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
+    /* Show the tooltip text when you mouse over the tooltip container */
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
 
-.diceLabel {
-    position: fixed;
-    white-space: nowrap;
-    font-size: .75rem;
-}
+    .diceLabel {
+        position: fixed;
+        font-size: .9rem;
+        max-width: 4rem;
+        white-space: nowrap;
+    }
 
-.left {
-    right: 2rem;
-}
+    .left {
+        right: 2rem;
+    }
 
-.right {
-    left: 2rem;
-}
+    .right {
+        left: 2rem;
+    }
 
-.top {
-    bottom: 2rem;
-}
+    .top {
+        bottom: 2rem;
+    }
 
-.bottom {
-    top: 2rem;
-}
+    .bottom {
+        top: 2rem;
+    }
 
-.haloWrapper {
-    width: 100%;
-    height: 15rem;
-    position: relative;
-}
+    .haloWrapper {
+        width: 100%;
+        height: 15rem;
+        position: relative;
+    }
 
-.GMCCard {
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 1fr repeat(2, 2fr);
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-                       "gmcTitle gmcTitle gmcTitle"
-                       "GMCAvatar GMCAvatar GMCAvatar"
-                       "Talents Talents Talents";
-}
+    .GMCCard {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        grid-template-rows: 1fr repeat(2, 2fr);
+        gap: 0px 0px;
+        grid-auto-flow: row;
+        grid-template-areas:
+            "gmcTitle gmcTitle gmcTitle"
+            "GMCAvatar GMCAvatar GMCAvatar"
+            "Talents Talents Talents";
+    }
 
-.gmcTitle {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: .75fr 1fr;
-    gap: 0px 0px;
-    grid-auto-flow: row;
-    grid-template-areas:
-        "Name Name Name"
-        "Distinctions Distinctions Distinctions";
-    grid-area: gmcTitle;
-}
-
-
-.GMCCard, .gmcCardBack {
-    max-height: 570px;
-    max-width: 330px;
-    padding: 0px;
-    margin: 0px;
-    width: 100%;
-    box-sizing: border-box;
-    display: grid;
-    aspect-ratio: 2.75/4.75;
-    gap: 0.1em 0em;
-    border: 2px solid black;
-    border-radius: 15%;
-}
-
-.gmcCardBack {
-    gap: 0.2em 0em;
-    grid-auto-flow: row;
-    border: 2px solid black;
-    border-radius: 15%;
-    justify-self: center;
-    align-self: center;
-}
-
-.Name {
-    grid-area: Name;
-    justify-self: center;
-    align-self: center;
-    grid-area: Name;
-    text-anchor: middle;
-    text-align: center;
-    font-weight: bolder;
-    font-size: 1.3REM;
-    font-family: "Palatino Linotype", Trebuchet MS, Verdana, sans-serif;
-    text-align-last: center;
-    color: black;
-}
+    .gmcTitle {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: .75fr 1fr;
+        gap: 0px 0px;
+        grid-auto-flow: row;
+        grid-template-areas:
+            "Name Name Name"
+            "Distinctions Distinctions Distinctions";
+        grid-area: gmcTitle;
+    }
 
 
-.Distinctions {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
-    grid-area: Distinctions;
-    grid-template-areas:
-                       "Distinction-1 Distinction-2"
-                       "Distinction-3 Distinction-3";
+    .GMCCard, .gmcCardBack {
+        max-height: 570px;
+        max-width: 330px;
+        padding: 0px;
+        margin: 0px;
+        width: 100%;
+        height: fit-content;
+        display: grid;
+        gap: 0.2em 0em;
+        border: 2px solid black;
+        border-radius: 5%;
+    }
+
+    .gmcCardBack {
+        gap: 0.2em 0em;
+        grid-auto-flow: row;
+        border: 2px solid black;
         justify-self: center;
-    align-self: center;
-}
+        align-self: center;
+    }
 
-.Talents {
-    grid-area: Talents;
-}
+    .Name {
+        grid-area: Name;
+        justify-self: center;
+        align-self: center;
+        grid-area: Name;
+        text-anchor: middle;
+        text-align: center;
+        font-weight: bolder;
+        font-size: 1.3REM;
+        font-family: "Palatino Linotype", Trebuchet MS, Verdana, sans-serif;
+        text-align-last: center;
+        color: black;
+    }
 
-.GMCAvatar {
-    grid-area: GMCAvatar;
-}
-.distinction, .distinctionLabel {
-    font-size: .9rem;
-    font-weight: bold;
-}
 
-.distinctionLabel {
-    position: relative;
-    right: 0rem;
-    display: block;
-    text-decoration-line: underline;
-}
+    .Distinctions {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 1fr;
+        grid-area: Distinctions;
+        grid-template-areas:
+            "Distinction-1 Distinction-2"
+            "Distinction-3 Distinction-3";
+        justify-self: center;
+        align-self: center;
+    }
 
-.Distinction-1, .Distinction-2, .Distinction-3 {
-    align-items: center;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    width: 100%;
-}
+    .Talents {
+        grid-area: Talents;
+        padding: 1rem;
+    }
 
-.Distinction-1 {
-    grid-area: Distinction-1;
-}
+    .GMCAvatar {
+        grid-area: GMCAvatar;
+    }
 
-.Distinction-2 {
-    grid-area: Distinction-2;
-}
+    .distinction, .distinctionLabel {
+        font-size: .9rem;
+        font-weight: bold;
+        max-width: 8rem;
+    }
 
-.Distinction-3 {
-    grid-area: Distinction-3;
-}
+    .distinctionLabel {
+        position: relative;
+        right: 0rem;
+        display: block;
+        text-decoration-line: underline;
+    }
+
+    .Distinction-1, .Distinction-2, .Distinction-3 {
+        align-items: center;
+        display: flex;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .Distinction-1 {
+        grid-area: Distinction-1;
+    }
+
+    .Distinction-2 {
+        grid-area: Distinction-2;
+    }
+
+    .Distinction-3 {
+        grid-area: Distinction-3;
+    }

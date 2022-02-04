@@ -65,7 +65,7 @@ namespace Data
             },
             new CortexSceneTrait
             {
-                Name = "A cure",
+                Name = "Medicine",
                 Type = "Asset"
             },
             new CortexSceneTrait
@@ -80,7 +80,7 @@ namespace Data
             },
             new CortexSceneTrait
             {
-                Name = "an Idol",
+                Name = "Holy Relic",
                 Type = "Asset"
             },
             new CortexSceneTrait
@@ -290,7 +290,7 @@ namespace Data
             },
             new CortexTrait
             {
-                Name = "A cure",
+                Name = "Medicine",
                 Type = "Asset"
             },
             new CortexTrait
@@ -300,7 +300,7 @@ namespace Data
             },
             new CortexTrait
             {
-                Name = "an Idol",
+                Name = "Holy Relic",
                 Type = "Asset"
             },
             new CortexTrait
@@ -444,6 +444,8 @@ namespace Data
                 Subtype = "Soul"
             },
         };
+
+        public SVGFaces Faces = new();
     }
 
     public static class StaticDataExtensions

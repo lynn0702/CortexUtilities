@@ -1,10 +1,8 @@
-﻿@page "/traiteditor"
+﻿@page "/scenetraiteditor"
 
 @inject StaticData Data
 
-<p>This page demonstrates how to configure the Razden Blazor DataGrid for inline editing</p>
-
-    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Order" Click="@InsertRow" Disabled=@(traitToInsert != null) />
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Scene Trait" Click="@InsertRow" Disabled=@(traitToInsert != null) />
     <RadzenDataGrid @ref="traitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
                 Data="@Data.SceneTraitList" TItem="CortexSceneTrait" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
         <Columns>

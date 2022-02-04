@@ -1,4 +1,5 @@
-﻿
+﻿@inject StaticData Data
+
 <div class="haloWrapper">
     <div style="align-items: center;
             display: flex;
@@ -10,10 +11,10 @@
             border-radius: 50%;
             border-style: solid;
                 position: absolute;
-                left: 50%;
+                left: 30%;
                 top: 50%;
                 transform: translate(-50%, -50%);
-                background-image: url(images/doorway.svg);
+                background-image: url(@("images/faces/"+@Face));
             ">
         <div style="position: relative;">
             <div style="height: 2rem; width: 2rem;">
@@ -30,75 +31,7 @@
                     </div>
                 </div>
             }
-            
-@*            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(30deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-30deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Longer Distinction" labelPosition="left"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(60deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-60deg); width: 100%;">
-                    <CortexDice die="6" labeltext="Snackin" labelPosition="left"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(90deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-90deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Distinction" labelPosition="top"></CortexDice>
-                </div>
-            </div>
-
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(120deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-120deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Fiddlin" labelPosition="right"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(150deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-150deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Distinction" labelPosition="right"></CortexDice>
-                </div>
-            </div>
-
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(180deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-180deg); width: 100%;">
-                    <CortexDice die="10" labeltext="Bossin" labelPosition="right"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(210deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-210deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Distinction" labelPosition="right"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(240deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-240deg); width: 100%;">
-                    <CortexDice die="12" labeltext="Fightin" labelPosition="right"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(270deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-270deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Distinction" labelPosition="bottom"></CortexDice>
-                </div>
-            </div>
-
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(300deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-300deg); width: 100%;">
-                    <CortexDice die="2" labeltext="Occultin" labelPosition="left"></CortexDice>
-                </div>
-            </div>
-            
-            <div style="height: 2rem; position: absolute; top: 0px; transform: rotate(330deg) translateX(-5rem); width: 2rem;">
-                <div style="align-items: center; display: flex; height: 100%; justify-content: center; transform: rotate(-330deg); width: 100%;">
-                    <CortexDice die="8" labeltext="Distinction" labelPosition="left"></CortexDice>
-                </div>
-            </div>*@
-
+          
         </div>
     </div>
 </div>
@@ -106,6 +39,17 @@
 
     [Parameter]
     public IEnumerable<CortexTrait> Traits { get; set; } = new List<CortexTrait>();
+
+    [Parameter]
+    public string Face { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if(string.IsNullOrEmpty( Face))
+            Face = Data.Faces.GetRandomFace();
+
+        base.OnInitialized();
+    }
 
     private string LabelPosition(int rotation)
     {

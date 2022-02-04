@@ -23,19 +23,56 @@
             </li>
             
         </ul>
+        <br />
+        <h2>Icons</h2>
+        Icons used through this app are sourced from google material font and games-icon.net. 
+        
+        Icons provided under the Creative Commons 3.0 BY or CC0 if mentioned below.
+
+        Specific mention of face icons from the following artists. 
+        
+        <ul>
+            <li>
+                <a href="http://lorcblog.blogspot.com">
+                    Lorc
+                </a>
+            </li>
+            <li>
+                <a href="https://delapouite.com">
+                    Delapouite
+                </a>
+            </li>
+        <li>- Cathelineau</li>
+        <li>
+            <a href="http://berandas.deviantart.com">
+                Lord Berandas
+            </a>
+        </li>
+        <li>
+            <a href="http://darkzaitzev.deviantart.com">
+                DarkZaitzev
+            </a>
+        </li>
+        <li>
+            <a href="http://opengameart.org/content/95-game-icons">
+                Sbed
+            </a>
+        </li>
+        <li > - Skoll</li>
+
+            
+        </ul>
+        <br/>
+
+        More info and icons available at:
+        <a href="https://game-icons.net">
+            game-icons.net
+        </a>
+
     </div>
 </div>
 
 @code
 {
-    Random _random = new Random();
 
-    private IEnumerable<CortexTrait> GetRandomTraits(string[] types, int count)
-    {
-        if (Data.SceneTraitList == null) return new List<CortexTrait>();
-
-        return types.Length == 0 
-            ? Data.SceneTraitList.GetRandomElements(count).Select(st => new CortexTrait{Name = st.Name, Rating = _random.Next(3, 7)*2}) 
-            : Data.SceneTraitList.Where(t => types.Contains( t.Type)).GetRandomElements(count).Select(st => new CortexTrait{Name = st.Name, Rating = _random.Next(3, 7)*2});
-    }
 }

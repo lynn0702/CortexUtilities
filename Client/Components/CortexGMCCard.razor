@@ -20,14 +20,14 @@
             </div>
             <div class="Talents">Talents Coming Soon!</div>
             <div class="GMCAvatar">
-                <HaloAvatar Traits="GMC.Traits"></HaloAvatar>
+                <HaloAvatar Traits="GMC.Traits.Take(7)" Face="@Face"></HaloAvatar>
             </div>
         </div>
 
         <!-- Card 2 Back -->
         <div class="gmcCardBack paleWoodGradient card back @(!_flipped ? "clickThrough": "")" @onclick="FlipMe">
             <figure style="align-self:center">
-                <img src="images/person.svg" />
+                <img src="images/tarotMoonBack.svg" />
             </figure>
         </div>
         <!-- End Card 2 Back -->
@@ -39,9 +39,13 @@
     Random _random = new Random();
     CortexGMC GMC { get; set; }
 
+    string Face { get; set;}
+
     protected override void OnInitialized()
     {
         GMC = Generate();
+        Face = Data.Faces.GetRandomFace();
+
         base.OnInitialized();
     }
 
@@ -82,9 +86,13 @@
             {
                 Name = GetRandomTrait("Agent")?.Name,
                 CatalystDieSize = _random.Next(3, 7) * 2,
-                Traits = GetRandomGMCTraits(new[] { "Trait" }, _random.Next(0, 13)).ToList(),
+                Traits = GetRandomGMCTraits(new[] { "Trait" }, _random.Next(0, 7)).ToList(),
                 Distinctions = new List<CortexTrait>()
             };
+
+            gmc.Traits.AddRange( GetRandomGMCTraits(new[] { "Asset" }, _random.Next(0, 4)).ToList());
+
+        gmc.Traits = gmc.Traits.OrderBy(t => t.Name.Length).ToList();
 
         var allDistinctions = Data.GMCTraitList.Where(t => t.Type == "Distinction").ToList();
 
@@ -121,6 +129,8 @@
     public void ReGenerate()
     {
         GMC = Generate();
+        Face = Data.Faces.GetRandomFace();
+
         StateHasChanged();
     }
 
