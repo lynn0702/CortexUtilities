@@ -1,0 +1,79 @@
+﻿@page "/CortexTrait/{CortexTraitName}"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+@if (CortexTrait == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="card edit-detail">
+        <header class="card-header">
+            <p class="card-header-title">
+                @CortexTrait.Name
+            </p>
+        </header>
+        <div class="card-content">
+            <div class="content">
+                @if (!string.IsNullOrEmpty( CortexTrait.Name))
+                {
+
+                }
+                <InputDetail Name="name"
+                             Placeholder="Oranges"
+                             @bind-Value="CortexTrait.Name" />
+                <InputDetail Name="description"
+                             Placeholder="box"
+                             @bind-Value="CortexTrait.Type" />
+            </div>
+        </div>
+        <footer class="card-footer ">
+            <ButtonFooter Class="cancel-button"
+                          IconClasses="fas fa-undo"
+                          OnClick="@CancelCortexTrait"
+                          Label="Cancel" />
+            <ButtonFooter Class="save-button"
+                          IconClasses="fas fa-save"
+                          OnClick="@Save"
+                          Label="Save" />
+        </footer>
+    </div>
+}
+
+@code {
+    private CortexTrait CortexTrait;
+
+    [Parameter] public string CortexTraitName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!string.IsNullOrEmpty( CortexTraitName ))
+        {
+            CortexTrait = new CortexTrait();
+        }
+        else
+        {
+            var CortexTraits = await http.GetFromJsonAsync<IEnumerable<CortexTrait>>("api/CortexTraits");
+            CortexTrait = CortexTraits.First(p => p.Name == CortexTraitName);
+        }
+    }
+
+    private void CancelCortexTrait()
+    {
+        navigation.NavigateTo("/");
+    }
+
+    private async Task Save()
+    {
+        if (!string.IsNullOrEmpty( CortexTraitName ))
+        {
+            await http.PostAsJsonAsync("api/CortexTraits", CortexTrait);
+        }
+        else
+        {
+            await http.PutAsJsonAsync("api/CortexTraits", CortexTrait);
+        }
+        navigation.NavigateTo("/");
+    }
+}

@@ -46,22 +46,22 @@
                             <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.Name)</text>
                             <CortexDice die="Scene.SceneTraits?.ElementAtOrDefault(i)?.Rating ?? 0"></CortexDice>
                         </div>
-                        
+
                         @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.Type == "Agent")
                         {
                             <div class="Trait-Footer">
-                            @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.HasTrait == true)
-                            {
-                                <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.TraitName)</text>
-                                <CortexDice css="diceIconSub" die="Scene.SceneTraits?.ElementAtOrDefault(i)?.TraitRating ?? 0"></CortexDice>
-                            }
+                                @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.HasTrait == true)
+                                {
+                                    <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.TraitName)</text>
+                                    <CortexDice css="diceIconSub" die="Scene.SceneTraits?.ElementAtOrDefault(i)?.TraitRating ?? 0"></CortexDice>
+                                }
 
-                            @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.HasAsset == true)
-                            {
-                                <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.AssetName)</text>
-                                <CortexDice css="diceIconSub" die="Scene.SceneTraits?.ElementAtOrDefault(i)?.AssetRating ?? 0"></CortexDice>
-                            }
-                        </div>
+                                @if (Scene.SceneTraits?.ElementAtOrDefault(i)?.HasAsset == true)
+                                {
+                                    <text>@(Scene.SceneTraits?.ElementAtOrDefault(i)?.AssetName)</text>
+                                    <CortexDice css="diceIconSub" die="Scene.SceneTraits?.ElementAtOrDefault(i)?.AssetRating ?? 0"></CortexDice>
+                                }
+                            </div>
                         }
                     </div>
                 }
@@ -86,17 +86,17 @@
                 </div>
             }
         </div>
-    
-@*        @if (_flipped)
-        {*@
-            <!-- Card 2 Back -->
-            <div class="sceneCardBack paleWoodGradient card back @(!_flipped ? "clickThrough": "")" @onclick="FlipMe">
-                <figure style="align-self:center">
-                    <img src="images/doorway.svg" alt="door"/>
-                </figure>
-            </div>
-            <!-- End Card 2 Back -->
-       @* }*@
+
+        @*        @if (_flipped)
+            {*@
+        <!-- Card 2 Back -->
+        <div class="sceneCardBack paleWoodGradient card back @(!_flipped ? "clickThrough": "")" @onclick="FlipMe">
+            <figure style="align-self:center">
+                <img src="images/doorway.svg" alt="door" />
+            </figure>
+        </div>
+        <!-- End Card 2 Back -->
+        @* }*@
 
     </div>
 </div>
@@ -111,35 +111,30 @@
         base.OnInitialized();
     }
 
-    private IEnumerable<CortexSceneTrait> GetTraitOptions(string type)
-    {
-        return string.IsNullOrEmpty(type) ? _sData.SceneTraitList : _sData.SceneTraitList.Where(t => t.Type == type);
-    }
-
     public CortexSceneTrait GetRandomTrait(string type)
     {
         if (_sData.SceneTraitList == null) return new CortexSceneTrait
-        {
-            Name = "List Empty"
-        };
+            {
+                Name = "List Empty"
+            };
 
         var c = _sData.SceneTraitList.Count == 0 ? 0 : _sData.SceneTraitList.Count - 1;
 
-        if (string.IsNullOrEmpty(type)) return _sData.SceneTraitList.ElementAtOrDefault(_random.Next(0,c));
+        if (string.IsNullOrEmpty(type)) return _sData.SceneTraitList.ElementAtOrDefault(_random.Next(0, c));
 
         var list = _sData.SceneTraitList.Where(t => t.Type == type).ToArray();
         c = !list.Any() ? 0 : list.Count() - 1;
 
-        return list.ElementAtOrDefault(_random.Next( 0, c));
+        return list.ElementAtOrDefault(_random.Next(0, c));
     }
 
     private IEnumerable<CortexSceneTrait> GetRandomSceneTraits(string[] types, int count)
     {
         if (_sData.SceneTraitList == null) return new List<CortexSceneTrait>();
 
-        return types.Length == 0 
-            ? _sData.SceneTraitList.GetRandomElements(count) 
-            : _sData.SceneTraitList.Where(t => types.Contains( t.Type)).GetRandomElements(count);
+        return types.Length == 0
+            ? _sData.SceneTraitList.GetRandomElements(count)
+            : _sData.SceneTraitList.Where(t => types.Contains(t.Type)).GetRandomElements(count);
     }
 
     bool _flipped = true;
@@ -153,35 +148,26 @@
     public CortexScene Generate()
     {
         var scene = new CortexScene
-        {
-            Title = GetRandomTrait("Title")?.Name,
-            TraitCount = _random.Next(0, 6),
-            PoolQuantity = _random.Next(2, 7),
-            PoolDieSize = _random.Next(3, 7) * 2,
-            SettingTraits = GetRandomSceneTraits(new[] {"Trait"}, 4).Select(st => st.Name).ToArray()
-        };
-        scene.SceneTraits = GetRandomSceneTraits(new[] {"Agent", "Asset"}, scene.TraitCount).ToList();
+            {
+                Title = GetRandomTrait("Title")?.Name,
+                TraitCount = _random.Next(0, 6),
+                PoolQuantity = _random.Next(2, 7),
+                PoolDieSize = _random.Next(3, 7) * 2,
+                SettingTraits = GetRandomSceneTraits(new[] { "Trait" }, 4).Select(st => st.Name).ToArray()
+            };
+        scene.SceneTraits = GetRandomSceneTraits(new[] { "Agent", "Asset" }, scene.TraitCount).ToList();
 
 
         foreach (var cortexSceneTrait in scene.SceneTraits)
         {
-             cortexSceneTrait.Rating  = _random.Next(3, 7)*2;
-             cortexSceneTrait.HasTrait = _random.Next(0, 2) == 0;
-             cortexSceneTrait.TraitRating = _random.Next(2, 7)*2;
-             cortexSceneTrait.HasAsset = _random.Next(0, 2)  == 0;
-             cortexSceneTrait.AssetRating = _random.Next(2, 7)*2;
+            cortexSceneTrait.Rating = _random.Next(3, 7) * 2;
+            cortexSceneTrait.HasTrait = _random.Next(0, 2) == 0;
+            cortexSceneTrait.TraitRating = _random.Next(2, 7) * 2;
+            cortexSceneTrait.HasAsset = _random.Next(0, 2) == 0;
+            cortexSceneTrait.AssetRating = _random.Next(2, 7) * 2;
 
-            var traitRandomizer = _random.Next(0, 5);
+            cortexSceneTrait.TraitName = scene.SettingTraits[_random.Next(0, 4)];
 
-            if (traitRandomizer > scene.SettingTraits?.Length)
-            {
-                var test = "how in the world??";
-            }
-            else
-            {
-                cortexSceneTrait.TraitName = scene.SettingTraits[_random.Next(0, 4)];
-            }
-             
             cortexSceneTrait.AssetName = GetRandomTrait("Asset")?.Name;
         }
 

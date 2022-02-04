@@ -1,0 +1,38 @@
+﻿@page "/advanceddiceicon"
+<h3>AdvancedCortexDice</h3>
+
+<div class="advancedDice">
+    <div class="stepUp tooltip "><span class="material-icons" @onclick="IncrementDie">stairs</span> <span class="tooltiptext tooltip-top ">Step up</span></div>
+    <div class="stepDown tooltip">    <span class="material-icons im-flipped" @onclick="DecrementDie">stairs</span><span class="tooltiptext tooltip-top ">Step down</span></div>
+    <div class="advancedDiceIcon">
+        <CortexDice die="die" css="large"></CortexDice>
+    </div>
+    <div class="setDice">Set Dice</div>
+    <div class="addDice">    <span class="material-icons-round">
+        add_circle_outline
+    </span></div>
+    <div class="removeDice">    <span class="material-icons-round">
+        remove_circle_outline
+    </span></div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int die  { get; set; } = 4;
+
+    [Parameter]
+    public string css  { get; set; } = "";
+
+    void IncrementDie()
+    {
+        die = die < 12 ? die+2 : 2;
+        return;
+    }
+
+    void DecrementDie()
+    {
+        die = die > 2 ? die-2 : 12;
+        return;
+    }
+}

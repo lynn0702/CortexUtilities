@@ -1,10 +1,6 @@
-﻿@page "/scenecards"
+﻿@page "/gmccards"
 
-
-@inject HttpClient Http
-
-
-<div id="SceneCardDemo">
+<div id ="gmccarddemo">
     <div class="p-1">
         <button @onclick="Refresh">Flip All</button>
         <button @onclick="Redraw">Redraw All</button>
@@ -13,29 +9,29 @@
         @for(var i = 0; i <9; i++)
         {
             var k = i;
-            <CortexSceneCard @ref="_cards[k]"></CortexSceneCard>
+            <CortexGMCCard @ref="_cards[k]"></CortexGMCCard>
         }
     </div>
 </div>
 
 
 @code {
-    readonly CortexSceneCard[] _cards = new CortexSceneCard[9];
+    readonly CortexGMCCard[] _cards = new CortexGMCCard[9];
 
     protected override async Task OnInitializedAsync()
     {
-        //if (SData?.SceneTestList?.Count == null || SData?.SceneTestList?.Count <= 0)
-        //{
-        //    SData.SceneTestList = await Http.GetFromJsonAsync<List<CortexSceneTrait>>("SupportData/scenetest.json");
-        //}
+    //if (SData?.SceneTestList?.Count == null || SData?.SceneTestList?.Count <= 0)
+    //{
+    //    SData.SceneTestList = await Http.GetFromJsonAsync<List<CortexSceneTrait>>("SupportData/scenetest.json");
+    //}
 
     }
 
     protected override void OnInitialized()
     {
-        // Subscribe to the StateChanged EventHandler
-        //CharacterState.StateChanged +=
-        //    OnCounterStateAdvancedStateChanged;
+    // Subscribe to the StateChanged EventHandler
+    //CharacterState.StateChanged +=
+    //    OnCounterStateAdvancedStateChanged;
     }
     // This method is fired when the CounterState object
     // invokes its StateHasChanged() method
@@ -47,17 +43,17 @@
 
     private void Refresh()
     {
-        foreach (var cortexSceneCard in _cards)
+        foreach (var cortexGMCCard in _cards)
         {
-            cortexSceneCard.FlipMe();
+            cortexGMCCard.FlipMe();
         }
     }
 
     private void Redraw()
     {
-        foreach (var cortexSceneCard in _cards)
+        foreach (var cortexGMCCard in _cards)
         {
-            cortexSceneCard.ReGenerate();
+            cortexGMCCard.ReGenerate();
         }
     }
 

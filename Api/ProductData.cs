@@ -6,70 +6,40 @@ using Data;
 
 namespace Api;
 
-public interface IProductData
+public interface ICortexTraitData
 {
-    Task<Product> AddProduct(Product product);
-    Task<bool> DeleteProduct(int id);
-    Task<IEnumerable<Product>> GetProducts();
-    Task<Product> UpdateProduct(Product product);
+    Task<CortexTrait> AddCortexTrait(CortexTrait CortexTrait);
+    Task<bool> DeleteCortexTrait(string name);
+    Task<IEnumerable<CortexTrait>> GetCortexTraits();
+    Task<CortexTrait> UpdateCortexTrait(CortexTrait CortexTrait);
 }
 
-public class ProductData : IProductData
+public class CortexTraitData : ICortexTraitData
 {
-    private readonly List<Product> products = new List<Product>
-        {
-            new Product
-            {
-                Id = 10,
-                Name = "Strawberries",
-                Description = "16oz package of fresh organic strawberries",
-                Quantity = 1
-            },
-            new Product
-            {
-                Id = 20,
-                Name = "Sliced bread",
-                Description = "Loaf of fresh sliced wheat bread",
-                Quantity = 1
-            },
-            new Product
-            {
-                Id = 30,
-                Name = "Apples",
-                Description = "Bag of 7 fresh McIntosh apples",
-                Quantity = 1
-            }
-        };
+    private readonly List<CortexTrait> CortexTraits = new StaticData().GMCTraitList;
 
-    private int GetRandomInt()
+    public Task<CortexTrait> AddCortexTrait(CortexTrait CortexTrait)
     {
-        var random = new Random();
-        return random.Next(100, 1000);
+        CortexTraits.Add(CortexTrait);
+        return Task.FromResult(CortexTrait);
     }
 
-    public Task<Product> AddProduct(Product product)
+    public Task<CortexTrait> UpdateCortexTrait(CortexTrait CortexTrait)
     {
-        product.Id = GetRandomInt();
-        products.Add(product);
-        return Task.FromResult(product);
+        var index = CortexTraits.FindIndex(p => p.Name == CortexTrait.Name);
+        CortexTraits[index] = CortexTrait;
+        return Task.FromResult(CortexTrait);
     }
 
-    public Task<Product> UpdateProduct(Product product)
+    public Task<bool> DeleteCortexTrait(string name)
     {
-        var index = products.FindIndex(p => p.Id == product.Id);
-        products[index] = product;
-        return Task.FromResult(product);
-    }
-
-    public Task<bool> DeleteProduct(int id)
-    {
-        var index = products.FindIndex(p => p.Id == id);
-        products.RemoveAt(index);
+        var index = CortexTraits.FindIndex(p => p.Name == name);
+        CortexTraits.RemoveAt(index);
         return Task.FromResult(true);
     }
 
-    public Task<IEnumerable<Product>> GetProducts()
+    public Task<IEnumerable<CortexTrait>> GetCortexTraits()
     {
-        return Task.FromResult(products.AsEnumerable());
+        return Task.FromResult(CortexTraits.AsEnumerable());
     }
 }

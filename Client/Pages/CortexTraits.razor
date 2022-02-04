@@ -1,0 +1,72 @@
+﻿@page "/CortexTraitsPage"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+<div class="content-container">
+    <ListHeader Title="My List"
+                HandleAdd="@AddNewCortexTrait"
+                HandleRefresh="@HandleRefresh"
+                RoutePath="/CortexTraits" />
+    <div class="columns is-multiline is-variable">
+        <div class="column is-8">
+            <CortexTraitList ErrorMessage="@errorMessage"
+                         CortexTraits="@LocalCortexTraits"
+                         SelectCortexTrait="@SelectCortexTrait"
+                         DeleteCortexTrait="@DeleteCortexTrait" />
+        </div>
+    </div>
+
+    <ModalYesNo Message="@modalMessage"
+                OnNo="@CloseModal"
+                OnYes="@DeleteFromModal"
+                Show="@showModal"/>
+</div>
+
+@code {
+    private string errorMessage = "";
+    private IEnumerable<CortexTrait> LocalCortexTraits;
+    private CortexTrait CortexTraitToDelete;
+    private bool showModal;
+    private string modalMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        LocalCortexTraits = await http.GetFromJsonAsync<IEnumerable<CortexTrait>>("api/CortexTraits");
+    }
+
+    private void AddNewCortexTrait()
+    {
+        navigation.NavigateTo("/CortexTrait/0");
+    }
+
+    private async Task HandleRefresh()
+    {
+        LocalCortexTraits = await http.GetFromJsonAsync<IEnumerable<CortexTrait>>("api/CortexTraits");
+    }
+
+    private void SelectCortexTrait(CortexTrait CortexTrait)
+    {
+        navigation.NavigateTo($"/CortexTrait/{CortexTrait.Name}");
+    }
+
+    private void DeleteCortexTrait(CortexTrait CortexTrait)
+    {
+        CortexTraitToDelete = CortexTrait;
+        showModal = true;
+        modalMessage = $"Would you like to delete {CortexTraitToDelete.Name}";
+    }
+
+    private void CloseModal()
+    {
+        CortexTraitToDelete = null;
+        showModal = false;
+    }
+
+    private async Task DeleteFromModal()
+    {
+        await http.DeleteAsync($"api/CortexTraits/{CortexTraitToDelete.Name}");
+        await HandleRefresh();
+        CortexTraitToDelete = null;
+        showModal = false;
+    }
+}

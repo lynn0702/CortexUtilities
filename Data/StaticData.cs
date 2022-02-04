@@ -10,6 +10,8 @@ namespace Data
         {
             return list.OrderBy(arg => Guid.NewGuid()).Take(elementsCount).ToList();
         }
+
+        public static IEnumerable<(T item, int index)> Enumerated<T>(this IEnumerable<T> self) => self?.Select((item, index) => (item, index)) ?? new List<(T, int)>();
     }
 
     public class StaticData
@@ -212,6 +214,235 @@ namespace Data
                 Type = "Trait"
             },
 
+        };
+
+        public List<CortexTrait> GMCTraitList = new()
+        {
+            new CortexTrait
+            {
+                Name = "Patron",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "Witchlock Pistol",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Witchlock Rifle",
+                Type = "Asset"
+            },
+                        new CortexTrait
+            {
+                Name = "Tinkerer", Subtype="Mind",
+                Type = "Distinction"
+            },
+                        new CortexTrait
+            {
+                Name = "Homesteader", Subtype="Mind",
+                Type = "Distinction"
+            },
+                        new CortexTrait
+            {
+                Name = "Expansionist",
+                        Subtype = "Mind",
+                        Type = "Distinction"
+            },
+                        new CortexTrait
+            {
+                Name = "Soldier",
+                Subtype = "Mind",
+                Type = "Distinction"
+                        },
+            new CortexTrait
+            {
+                Name = "Academic",
+                        Subtype = "Mind",
+                        Type = "Distinction"
+            },
+            new CortexTrait
+            {
+                Name = "Spiritualist",
+                        Subtype = "Mind",
+                        Type = "Distinction"
+            },
+            new CortexTrait
+                        {
+                            Name = "Opportunist",
+                            Subtype = "Mind",
+                            Type = "Distinction"
+            },
+            new CortexTrait
+            {
+                Name = "Bandit",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "Information",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Soldier",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "A cure",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Worshiper",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "an Idol",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Innocent",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Lightning",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Worker",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "Fire",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "An Official",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "Stranger",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "a Local",
+                Type = "Agent"
+            },
+            new CortexTrait
+            {
+                Name = "Water",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Whiskey",
+                Type = "Asset"
+            },
+            new CortexTrait
+            {
+                Name = "Helpin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Believin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Bossin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Laborin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Fiddlin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Learnin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Fightin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Rushin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Slingin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Occultin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Shankin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Cheatin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Yakkin",
+                Type = "Trait"
+            },
+            new CortexTrait
+            {
+                Name = "Gamblin",
+                Type = "Trait"
+            },
+            new CortexTrait {Name="Preserved",Type="Distinction",Subtype = "Skin"},
+            new CortexTrait {Name= "Sculpted", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Ephemeral", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Exoskeleton", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Scaled", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Human", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Furred", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Horned", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Built", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Grown", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Decaying", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Inked", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Feathered", Type = "Distinction", Subtype = "Skin" },
+            new CortexTrait {Name= "Bleeding Heart", Type = "Distinction", Subtype = "Soul" },
+            new CortexTrait {Name= "Corrupt", Type = "Distinction", Subtype = "Soul" },
+            new CortexTrait {Name= "Inventive", Type = "Distinction", Subtype = "Soul" },
+            new CortexTrait {Name= "Enlightened", Type = "Distinction", Subtype = "Soul" },
+            new CortexTrait {Name= "Wistful", Type = "Distinction", Subtype = "Soul" },
+            new CortexTrait {Name= "Cunning", Type = "Distinction", Subtype = "Soul" },
+            new CortexTrait
+            {
+                Name = "Heroic",
+                Type = "Distinction",
+                Subtype = "Soul"
+            },
         };
     }
 

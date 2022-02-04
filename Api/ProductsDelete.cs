@@ -7,22 +7,22 @@ using System.Threading.Tasks;
 
 namespace Api;
 
-public class ProductsDelete
+public class CortexTraitsDelete
 {
-    private readonly IProductData productData;
+    private readonly ICortexTraitData CortexTraitData;
 
-    public ProductsDelete(IProductData productData)
+    public CortexTraitsDelete(ICortexTraitData CortexTraitData)
     {
-        this.productData = productData;
+        this.CortexTraitData = CortexTraitData;
     }
 
-    [FunctionName("ProductsDelete")]
+    [FunctionName("CortexTraitsDelete")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "products/{productId:int}")] HttpRequest req,
-        int productId,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "CortexTraits/{CortexTraitId:int}")] HttpRequest req,
+        string CortexTraitName,
         ILogger log)
     {
-        var result = await productData.DeleteProduct(productId);
+        var result = await CortexTraitData.DeleteCortexTrait(CortexTraitName);
 
         if (result)
         {

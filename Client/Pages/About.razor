@@ -1,4 +1,7 @@
 ﻿@page "/about"
+
+@inject StaticData Data
+
 <div class="content-container">
     <div class="content-title-group not-found">
         <h2 class="title">Feature Wish List</h2>
@@ -15,10 +18,24 @@
             </li>
             <li>
                 <a href="https://github.com/lynn0702/CortexUtilities">
-                   Project Source
+                    Project Source
                 </a>
             </li>
             
         </ul>
     </div>
 </div>
+
+@code
+{
+    Random _random = new Random();
+
+    private IEnumerable<CortexTrait> GetRandomTraits(string[] types, int count)
+    {
+        if (Data.SceneTraitList == null) return new List<CortexTrait>();
+
+        return types.Length == 0 
+            ? Data.SceneTraitList.GetRandomElements(count).Select(st => new CortexTrait{Name = st.Name, Rating = _random.Next(3, 7)*2}) 
+            : Data.SceneTraitList.Where(t => types.Contains( t.Type)).GetRandomElements(count).Select(st => new CortexTrait{Name = st.Name, Rating = _random.Next(3, 7)*2});
+    }
+}

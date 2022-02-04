@@ -10,24 +10,24 @@ using Data;
 
 namespace Api;
 
-public class ProductsPost
+public class CortexTraitsPost
 {
-    private readonly IProductData productData;
+    private readonly ICortexTraitData CortexTraitData;
 
-    public ProductsPost(IProductData productData)
+    public CortexTraitsPost(ICortexTraitData CortexTraitData)
     {
-        this.productData = productData;
+        this.CortexTraitData = CortexTraitData;
     }
 
-    [FunctionName("ProductsPost")]
+    [FunctionName("CortexTraitsPost")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "products")] HttpRequest req,
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "CortexTraits")] HttpRequest req,
         ILogger log)
     {
         var body = await new StreamReader(req.Body).ReadToEndAsync();
-        var product = JsonSerializer.Deserialize<Product>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var CortexTrait = JsonSerializer.Deserialize<CortexTrait>(body, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
 
-        var newProduct = await productData.AddProduct(product);
-        return new OkObjectResult(newProduct);
+        var newCortexTrait = await CortexTraitData.AddCortexTrait(CortexTrait);
+        return new OkObjectResult(newCortexTrait);
     }
 }

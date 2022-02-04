@@ -1,0 +1,129 @@
+﻿@using System.ComponentModel
+@using System.IO.IsolatedStorage
+@using System.CodeDom.Compiler
+
+@inject StaticData Data
+
+<div class="card-container">
+    <div class="card-flip @FlipCss">
+        <div class="GMCCard paleWoodGradient card front " @onclick="FlipMe">
+            <div class="gmcTitle">
+                <div class="Name">@GMC.Name</div>
+                <div class="Distinctions">
+                    @foreach (var (distinction, index) in GMC.Distinctions.Enumerated())
+                    {
+                        <div class="Distinction-@(index + 1)">
+                            <CortexDice die="@distinction.Rating" labeltext="@distinction.Name" labelCss="distinctionLabel" labelPosition="left"></CortexDice>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="Talents">Talents Coming Soon!</div>
+            <div class="GMCAvatar">
+                <HaloAvatar Traits="GMC.Traits"></HaloAvatar>
+            </div>
+        </div>
+
+        <!-- Card 2 Back -->
+        <div class="gmcCardBack paleWoodGradient card back @(!_flipped ? "clickThrough": "")" @onclick="FlipMe">
+            <figure style="align-self:center">
+                <img src="images/person.svg" />
+            </figure>
+        </div>
+        <!-- End Card 2 Back -->
+
+    </div>
+</div>
+
+@code {
+    Random _random = new Random();
+    CortexGMC GMC { get; set; }
+
+    protected override void OnInitialized()
+    {
+        GMC = Generate();
+        base.OnInitialized();
+    }
+
+    public CortexTrait GetRandomTrait(string type = null, string subtype = null)
+    {
+        if (Data.SceneTraitList == null) return new CortexTrait
+            {
+                Name = "List Empty"
+            };
+
+        var c = Data.GMCTraitList.Count == 0 ? 0 : Data.GMCTraitList.Count - 1;
+
+        if (string.IsNullOrEmpty(type) && string.IsNullOrEmpty(subtype)) return Data.GMCTraitList.GetRandomElements(1).Single();
+
+        return Data.GMCTraitList.Where(t => (type != null && t.Type == type) || ( subtype != null && t.Subtype == subtype)).GetRandomElements(1).Single();
+    }
+
+    private IEnumerable<CortexTrait> GetRandomGMCTraits(string[] types, int count)
+    {
+        if (Data.SceneTraitList == null) return new List<CortexTrait>();
+
+        return types.Length == 0
+            ? Data.GMCTraitList.GetRandomElements(count)
+            : Data.GMCTraitList.Where(t => types.Contains(t.Type)).GetRandomElements(count);
+    }
+
+    bool _flipped = true;
+    public void FlipMe()
+    {
+        _flipped = !_flipped;
+        StateHasChanged();
+    }
+    string FlipCss => _flipped ? "im-flipped" : "";
+
+    public CortexGMC Generate()
+    {
+        var gmc = new CortexGMC
+            {
+                Name = GetRandomTrait("Agent")?.Name,
+                CatalystDieSize = _random.Next(3, 7) * 2,
+                Traits = GetRandomGMCTraits(new[] { "Trait" }, _random.Next(0, 13)).ToList(),
+                Distinctions = new List<CortexTrait>()
+            };
+
+        var allDistinctions = Data.GMCTraitList.Where(t => t.Type == "Distinction").ToList();
+
+        var subtypes = allDistinctions.Select(y => y.Subtype).Distinct().ToList();
+
+        if (subtypes.Count > 1)
+        {
+            //get 1 distinction randomly for each subtype up to 3 randomly selected
+            foreach (var subtype in subtypes.GetRandomElements(_random.Next(1, 4)))
+            {
+                gmc.Distinctions.Add(allDistinctions.Where(d => d.Subtype == subtype).GetRandomElements(1).Single());
+            }
+        }
+        //else just get 1 to 3 random distinctions
+        //get a random distinction any one doesn't matter
+        gmc.Distinctions = allDistinctions.GetRandomElements(_random.Next(1, 4));
+
+        //todo talents retrieval
+
+        //set ratings
+        foreach (var cortexTrait in gmc.Traits)
+        {
+            cortexTrait.Rating = _random.Next(3, 7) * 2;
+        }
+
+        foreach (var cortexTrait in gmc.Distinctions)
+        {
+            cortexTrait.Rating = 8;
+        }
+
+        return gmc;
+    }
+
+    public void ReGenerate()
+    {
+        GMC = Generate();
+        StateHasChanged();
+    }
+
+}
+
+

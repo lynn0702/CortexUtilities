@@ -1,6 +1,7 @@
 ﻿
+<span class="diceLabel @labelCss @labelPosition">@labeltext</span>
+<img  class="diceIcon @css"  @onclick="IncrementDie" @oncontextmenu="DecrementDie" @onclick:stopPropagation="true"  @oncontextmenu:preventDefault="true" src="images/d@(die).svg" alt="d@(die)"/>
 
-        <img  class="diceIcon @css"  @onclick="IncrementDie" @oncontextmenu="DecrementDie" @onclick:stopPropagation="true"  @oncontextmenu:preventDefault="true" src="images/d@(die).svg" alt="d@(die)"/>
 
 
 @code {
@@ -9,6 +10,15 @@
 
     [Parameter]
     public string css  { get; set; } = "";
+
+    [Parameter]
+    public string labelCss  { get; set; } = "";
+
+    [Parameter]
+    public string labelPosition  { get; set; } = "left";
+
+    [Parameter]
+    public string labeltext  { get; set; } = "";
 
     void IncrementDie()
     {
