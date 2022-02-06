@@ -6,21 +6,28 @@
 
 <div id="SceneCardDemo">
     <div class="p-1">
-        <button @onclick="Refresh">Flip All</button>
-        <button @onclick="Redraw">Redraw All</button>
+        <MudButtonGroup>
+            <MudButton @onclick="Refresh">Flip</MudButton>
+            <MudButton @onclick="Redraw">Draw</MudButton>
+        </MudButtonGroup>
     </div>
-    <div class="grid-3-col">
+    <div class="grid-3-col desktop">
         @for(var i = 0; i <9; i++)
         {
             var k = i;
             <CortexSceneCard @ref="_cards[k]"></CortexSceneCard>
         }
     </div>
+    
+
+    <div class="single">
+        <CortexSceneCard @ref="_cards[9]"></CortexSceneCard>
+    </div>
 </div>
 
 
 @code {
-    readonly CortexSceneCard[] _cards = new CortexSceneCard[9];
+    readonly CortexSceneCard[] _cards = new CortexSceneCard[10];
 
     protected override async Task OnInitializedAsync()
     {

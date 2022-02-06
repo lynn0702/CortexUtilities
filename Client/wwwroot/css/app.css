@@ -196,10 +196,17 @@ code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.grid-3-col {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+.desktop {
+    display: none;
+}
+
+.single {
+    display: flex;
+    justify-content: center;
+}
+
+.m-1rem {
+    margin: 1rem;
 }
 
 @media only screen and (min-width: 768px) {
@@ -207,6 +214,10 @@ code {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
+    }
+
+    .single {
+        display: none !important;
     }
 }
 .diceIcon {
@@ -221,7 +232,7 @@ code {
     }
 
     .card-container {
-        display: grid;
+        display: flex;
         max-height: 840px;
         max-width: 600px;
         min-height: 420px;
@@ -619,27 +630,28 @@ code {
         grid-area: gmcTitle;
     }
 
+.GMCCard, .gmcCardBack {
+    max-height: 570px;
+    max-width: 330px;
+    padding: 0px;
+    margin: 0px;
+    min-width: 330px;
+    min-height: 570px;
+    display: grid;
+    gap: 0.2em 0em;
+    border: 2px solid black;
+    border-radius: 5%;
+}
 
-    .GMCCard, .gmcCardBack {
-        max-height: 570px;
-        max-width: 330px;
-        padding: 0px;
-        margin: 0px;
-        width: 100%;
-        height: fit-content;
-        display: grid;
-        gap: 0.2em 0em;
-        border: 2px solid black;
-        border-radius: 5%;
-    }
-
-    .gmcCardBack {
-        gap: 0.2em 0em;
-        grid-auto-flow: row;
-        border: 2px solid black;
-        justify-self: center;
-        align-self: center;
-    }
+.gmcCardBack {
+    gap: 0.2em 0em;
+    grid-auto-flow: row;
+    border: 2px solid black;
+    justify-self: center;
+    align-self: center;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
 
     .Name {
         grid-area: Name;

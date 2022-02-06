@@ -25,7 +25,7 @@ namespace Data
             "pig-face.svg", "pirate-captain.svg", "plane-pilot.svg", "police-officer-head.svg", "psychic-waves.svg",
             "pummeled.svg", "pumpkin-lantern.svg", "pumpkin-mask.svg", "pyromaniac.svg", "quick-man.svg",
             "robber-mask.svg", "robot-antennas.svg", "robot-helmet.svg", "sherlock-holmes.svg", "silenced.svg",
-            "sleepy.svg", "sly.svg", "smitten.svg", "snake-bite.svg", "spectacle-lenses.svg", "spectacles.svg",
+            "sleepy.svg", "sly.svg", "snake-bite.svg", "spectacle-lenses.svg", "spectacles.svg",
             "spiked-halo.svg", "spy.svg", "star-struck.svg", "sunglasses.svg", "swallow.svg", "tear-tracks.svg",
             "top-hat.svg", "totem-head.svg", "triton-head.svg", "vampire-dracula.svg", "viking-head.svg",
             "warlock-hood.svg", "witch-face.svg", "wizard-face.svg", "wolf-head.svg", "woman-elf-face.svg"

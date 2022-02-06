@@ -1,37 +1,45 @@
 ﻿@page "/gmccards"
 
-<div id ="gmccarddemo">
+<div id="gmccarddemo">
+
     <div class="p-1">
-        <button @onclick="Refresh">Flip All</button>
-        <button @onclick="Redraw">Redraw All</button>
+        <MudButtonGroup>
+            <MudButton @onclick="Refresh">Flip</MudButton>
+            <MudButton @onclick="Redraw">Draw</MudButton>
+        </MudButtonGroup>
     </div>
-    <div class="grid-3-col">
-        @for(var i = 0; i <9; i++)
+
+    <div class="grid-3-col desktop">
+        @for (var i = 0; i < 9; i++)
         {
             var k = i;
             <CortexGMCCard @ref="_cards[k]"></CortexGMCCard>
         }
     </div>
+
+    <div class="single">
+            <CortexGMCCard @ref="_cards[9]"></CortexGMCCard>
+    </div>
 </div>
 
 
 @code {
-    readonly CortexGMCCard[] _cards = new CortexGMCCard[9];
+    readonly CortexGMCCard[] _cards = new CortexGMCCard[10];
 
     protected override async Task OnInitializedAsync()
     {
-    //if (SData?.SceneTestList?.Count == null || SData?.SceneTestList?.Count <= 0)
-    //{
-    //    SData.SceneTestList = await Http.GetFromJsonAsync<List<CortexSceneTrait>>("SupportData/scenetest.json");
-    //}
+        //if (SData?.SceneTestList?.Count == null || SData?.SceneTestList?.Count <= 0)
+        //{
+        //    SData.SceneTestList = await Http.GetFromJsonAsync<List<CortexSceneTrait>>("SupportData/scenetest.json");
+        //}
 
     }
 
     protected override void OnInitialized()
     {
-    // Subscribe to the StateChanged EventHandler
-    //CharacterState.StateChanged +=
-    //    OnCounterStateAdvancedStateChanged;
+        // Subscribe to the StateChanged EventHandler
+        //CharacterState.StateChanged +=
+        //    OnCounterStateAdvancedStateChanged;
     }
     // This method is fired when the CounterState object
     // invokes its StateHasChanged() method
