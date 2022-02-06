@@ -212,7 +212,7 @@ code {
 .diceIcon {
         width: 2rem;
         margin: 0;
-        z-index: 2;
+/*       z-index: 2;*/
     }
 
     .diceIconSub {
@@ -393,21 +393,23 @@ code {
         transform: rotateY(180deg);
     }
 
-    .sceneCardBack {
-        max-height: 420px;
-        max-width: 300px;
-        width: 100%;
-        padding: 0px;
-        margin: 0px;
-        box-sizing: border-box;
-        display: grid;
-        gap: 0.2em 0em;
-        grid-auto-flow: row;
-        border: 2px solid black;
-        border-radius: 5%;
-        justify-self: center;
-        align-self: center;
-    }
+.sceneCardBack {
+    max-height: 420px;
+    max-width: 300px;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    display: grid;
+    gap: 0.2em 0em;
+    grid-auto-flow: row;
+    border: 2px solid black;
+    border-radius: 5%;
+    justify-self: center;
+    align-self: center;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
 
     .SceneTitle {
         display: grid;
