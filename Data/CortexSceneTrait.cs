@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Data
+﻿namespace Data
 {
     public class CortexSceneTrait
     {
@@ -27,10 +25,10 @@ namespace Data
 
         }
 
-        public CortexSceneTrait(IList<object> values)
+        public CortexSceneTrait(string[] values)
         {
-            Name = values[0].ToString();
-            Type = values[1].ToString();
+            Name = values[0];
+            Type = values[1];
         }
     }
 }

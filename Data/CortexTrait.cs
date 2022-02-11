@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Data
+﻿namespace Data
 {
     public class CortexTrait
     {
@@ -13,5 +7,17 @@ namespace Data
 
         public string Subtype { get; set; }
         public int Rating { get; set; }
+
+        public CortexTrait()
+        {
+
+        }
+
+        public CortexTrait(string[] values)
+        {
+            Name = values[0];
+            Type = values[1];
+            Subtype = values[2];
+        }
     }
 }

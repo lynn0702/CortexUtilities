@@ -422,17 +422,19 @@ code {
     backface-visibility: hidden;
 }
 
-    .SceneTitle {
-        display: grid;
-        align-self: start;
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(3, 1fr);
-        grid-template-areas:
-            "Top-Edge"
-            "Title-Bar"
-            "Rating-Bar";
-        grid-area: 1 / 2 / 3 / 6;
-    }
+.SceneTitle {
+    display: grid;
+    align-self: start;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-areas:
+        "Top-Edge"
+        "Title-Bar"
+        "Rating-Bar";
+    grid-area: 1 / 2 / 3 / 6;
+    height: -moz-available; /* WebKit-based browsers will ignore this. */
+    height: -webkit-fill-available; /* Mozilla-based browsers will ignore this. */
+}
 
     .Title-Bar {
         justify-self: center;

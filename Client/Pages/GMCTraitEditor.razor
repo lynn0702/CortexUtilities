@@ -1,7 +1,17 @@
 ﻿@page "/gmctraiteditor"
 @using DataGridEditMode = Radzen.DataGridEditMode
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Google.Apis.Sheets.v4
+@using Google.Apis.Auth.OAuth2
+@using Google.Apis.Services
 
 @inject StaticData Data
+
+@inject IHttpClientFactory ClientFactory
+@inject IAccessTokenProvider TokenProvider
+
+<MudButton Color="Color.Secondary" OnClick="LoadTest">Load Eidolon</MudButton>
+
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New GMC Trait" Click="@InsertRow" Disabled=@(traitToInsert != null) />
     <RadzenDataGrid @ref="traitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
@@ -127,5 +137,68 @@
     void OnCreateRow(CortexTrait order)
     {
         Data.GMCTraitList.Add(order);
+    }
+
+    private async Task<SheetsService> GetSheetService()
+    {
+        var tokenResult = await TokenProvider.RequestAccessToken(
+            new AccessTokenRequestOptions
+            {
+                Scopes = new[] { "https://www.googleapis.com/auth/drive"}
+            });
+
+        if (tokenResult.TryGetToken(out var token))
+        {
+            GoogleCredential credential = GoogleCredential.FromAccessToken(token.Value).CreateScoped(SheetsService.Scope.Drive);
+
+            SheetsService service = new(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                ApiKey = "AIzaSyAwPqx9N3S7HTuePmZPy0gYx924vY2K9Go",
+                ApplicationName = "",
+                GZipEnabled = false
+            });
+
+            return service;
+        }
+
+        return null;
+    }
+
+    private async Task LoadTest()
+    {
+    //try
+    //{
+    //    var client = ClientFactory.CreateClient("GoogleSheets");
+
+    //   var  examples = 
+    //        await client.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1ZIDphYyexhUDj17Dm7ewGxHDq7bAfst-02VmfzmyYaA/values/Sheet13!A1:Z1000");
+    //    var response = SheetPareser.Traits(examples.values);
+    //}
+    //catch (AccessTokenNotAvailableException exception)
+    //{
+    //    exception.Redirect();
+    //}
+        try
+        {
+            var sheetService = await GetSheetService();
+
+            var range = $"GMC Traits EA!A:C";
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                sheetService.Spreadsheets.Values.Get("1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI", range);
+    // Executing Read Operation...
+            var response = await request.ExecuteAsync();
+     
+            Data.GMCTraitList = response.Values.Select(row => new CortexTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+            Data.GMCTraitList.RemoveAt(0);
+
+            StateHasChanged();
+    //var test2 = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1ZIDphYyexhUDj17Dm7ewGxHDq7bAfst-02VmfzmyYaA/values/Sheet13!A1:Z1000?key=AIzaSyA_vQ6nmcVJyVmX4VVDFxTCjwy3KTZPcR8");
+
+        }
+        catch (Exception exception)
+        {
+            var test = exception;
+        }
     }
 }

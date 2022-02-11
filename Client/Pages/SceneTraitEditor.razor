@@ -1,10 +1,31 @@
 ﻿@page "/scenetraiteditor"
 @using DataGridEditMode = Radzen.DataGridEditMode
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Color = MudBlazor.Color
 
 @inject StaticData Data
+@inject NavigationManager Navigation
+@inject HttpClient Http
 
-<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Scene Trait" Click="@InsertRow" Disabled=@(traitToInsert != null) />
-    <RadzenDataGrid @ref="traitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
+@inject IAccessTokenProvider TokenProvider
+
+@inherits DriveManager
+
+<MudButton Color="Color.Secondary" OnClick="LoadEidolon">Load Eidolon</MudButton>
+@if (_driveFiles != null)
+{
+    <MudSelect T="DriveFile" @bind-Value="@selectedFile" ToStringFunc="@converter" Label="Select your file" AnchorOrigin="Origin.BottomCenter" Variant="Variant.Outlined" Clearable>
+        @foreach (var item in _driveFiles)
+        {
+            <MudSelectItem Value="@item">@item.Name</MudSelectItem>
+        }
+    </MudSelect>
+    <MudButton Color="Color.Secondary" OnClick="LoadUserData">Load Selected</MudButton>
+}
+<MudButton Color="Color.Secondary" OnClick="CreateSheet">Create Sheet</MudButton>
+
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Scene Trait" Click="@InsertRow" Disabled="@(traitToInsert != null)" />
+    <RadzenDataGrid @ref="scenetraitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
                 Data="@Data.SceneTraitList" TItem="CortexSceneTrait" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
         <Columns>
             <RadzenDataGridColumn TItem="CortexSceneTrait" Property="Name" Title="Name">
@@ -45,18 +66,22 @@
     </RadzenDataGrid>
 
 @code {
-    RadzenDataGrid<CortexSceneTrait> traitsGrid;
+    RadzenDataGrid<CortexSceneTrait> scenetraitsGrid;
 
-    string[] traitTypes = new[] {"Title", "Agent", "Asset", "Trait", "Trait"};
+    string fileId = "";
 
-    protected override void OnInitialized()
+    DriveFile selectedFile;
+
+    string[] traitTypes = new[] {"Title", "Agent", "Asset", "Trait"};
+
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
+        await base.OnInitializedAsync();
     }
 
     async Task EditRow(CortexSceneTrait order)
     {
-        await traitsGrid.EditRow(order);
+        await scenetraitsGrid.EditRow(order);
     }
 
     void OnUpdateRow(CortexSceneTrait order)
@@ -65,7 +90,6 @@
         {
             traitToInsert = null;
         }
-
     }
 
     async Task SaveRow(CortexSceneTrait order)
@@ -77,7 +101,7 @@
 
         Data.SceneTraitList.Add(order);
 
-        await traitsGrid.UpdateRow(order);
+        await scenetraitsGrid.UpdateRow(order);
     }
 
     void CancelEdit(CortexSceneTrait order)
@@ -87,7 +111,7 @@
             traitToInsert = null;
         }
 
-        traitsGrid.CancelEditRow(order);
+        scenetraitsGrid.CancelEditRow(order);
     }
 
     async Task DeleteRow(CortexSceneTrait order)
@@ -101,11 +125,11 @@
         {
             Data.SceneTraitList.Remove(order);
 
-            await traitsGrid.Reload();
+            await scenetraitsGrid.Reload();
         }
         else
         {
-            traitsGrid.CancelEditRow(order);
+            scenetraitsGrid.CancelEditRow(order);
         }
     }
 
@@ -114,7 +138,7 @@
     async Task InsertRow()
     {
         traitToInsert = new CortexSceneTrait();
-        await traitsGrid.InsertRow(traitToInsert);
+        await scenetraitsGrid.InsertRow(traitToInsert);
     }
 
     void OnCreateRow(CortexSceneTrait order)
@@ -122,4 +146,24 @@
         Data.SceneTraitList.Add(order);
 
     }
+
+    private async void LoadEidolon()
+    {
+        var source = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI/values/SceneTraitsEA!A1:Z1000?key=AIzaSyA_vQ6nmcVJyVmX4VVDFxTCjwy3KTZPcR8");
+
+        Data.SceneTraitList = source.values.Select(row => new CortexSceneTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+        Data.SceneTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
+
+        StateHasChanged();
+    }
+
+    private async void LoadUserData()
+    {
+        var source = await FetchSheetData(selectedFile.FileId, "A:C"); 
+        Data.SceneTraitList = source.Select(row => new CortexSceneTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+        Data.SceneTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
+
+        StateHasChanged();
+    }
+
 }

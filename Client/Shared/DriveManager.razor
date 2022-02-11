@@ -1,0 +1,171 @@
+﻿@using Google.Apis.Sheets.v4
+@using Google.Apis.Sheets.v4.Data
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Google.Apis.Auth.OAuth2
+@using Google.Apis.Drive.v3
+@using Google.Apis.Services
+
+
+@inject HttpClient Http
+@inject IAccessTokenProvider TokenProvider
+
+@code {
+    public List<DriveFile> _driveFiles;
+
+    protected override async Task OnInitializedAsync()
+    {
+         _driveFiles = await GetDriveFiles();
+    }
+
+    private async Task<List<DriveFile>> GetDriveFiles()
+    {
+        var drive = await GetDriveService();
+
+        var list = await drive.Files.List().ExecuteAsync();
+        return list.Files.Select(f => new DriveFile {Name = f.Name, FileId = f.Id}).ToList();
+    }
+
+    private async Task<BaseClientService.Initializer> GetDriveInitializer()
+    {
+        var tokenResult = await TokenProvider.RequestAccessToken(
+            new AccessTokenRequestOptions
+            {
+                Scopes = new[] {"https://www.googleapis.com/auth/drive.file"}
+            });
+
+        if (tokenResult.TryGetToken(out var token))
+        {
+            var credential = GoogleCredential.FromAccessToken(token.Value).CreateScoped(SheetsService.Scope.DriveFile);
+            return new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                ApiKey = "AIzaSyAwPqx9N3S7HTuePmZPy0gYx924vY2K9Go", //todo fetch from appsettings?
+                ApplicationName = "Cortex Lynn Jones Rocks",
+                GZipEnabled = false,
+
+            };
+        }
+        return null; //todo redirect to login?
+    }
+
+    public async Task<SheetsService> GetSheetService()
+    {
+        return new SheetsService(await GetDriveInitializer());
+    }
+
+    public async Task<DriveService> GetDriveService()
+    {
+        return new DriveService(await GetDriveInitializer());
+    }
+    
+    //creates a new sheet which is inside drive.file scope, returns fileid
+    public  async Task<string> CreateSheet(){
+        try
+        {
+            var service = await GetSheetService();
+
+            var newSheet = new Spreadsheet
+                    {
+                        Properties = new SpreadsheetProperties
+                        {
+                            Title = "Cortex Randomization Sheet"
+                        },
+                        Sheets = new List<Sheet>
+                        {
+                            new Sheet
+                            {
+                                Properties = new SheetProperties
+                                {
+                                    Title = "SceneTraits"
+                                }
+                            }
+                        }
+                    };
+
+                    newSheet = await service.Spreadsheets.Create(newSheet).ExecuteAsync();
+
+                     var fileId = newSheet.SpreadsheetId;
+
+                    var valueRange = new ValueRange
+                    {
+                        Values = new List<IList<object>>
+                        {
+                            new List<object>
+                            {
+                            "Name", "Type", "Subtype"
+                            }
+                        }
+                    };
+
+                    var sheet =  service.Spreadsheets.Values.Update(valueRange, fileId,"SceneTraitsEA!A1:C1");
+
+                    sheet.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+
+                    await sheet.ExecuteAsync();
+              
+            _driveFiles = await GetDriveFiles();
+
+            StateHasChanged();
+
+                return fileId;
+            }
+            catch (Exception exception)
+            {
+                var test = exception;
+                throw;
+            }
+    }
+
+
+
+    // Pass in your data as a list of a list (2-D lists are equivalent to the 2-D spreadsheet structure)
+    public async Task<string> CopySheetData(SheetAPIResponse source, string fileId) { 
+        String range = source.range;
+        string valueInputOption = "USER_ENTERED";
+
+    // The new values to apply to the spreadsheet.
+        List<ValueRange> updateData = new List<ValueRange>();
+        var dataValueRange = new ValueRange();
+        dataValueRange.Range = range;
+        dataValueRange.Values = source.values;
+        updateData.Add(dataValueRange);
+
+        BatchUpdateValuesRequest requestBody = new BatchUpdateValuesRequest();
+        requestBody.ValueInputOption = valueInputOption;
+        requestBody.Data = updateData;
+
+        var service = await GetSheetService();
+        var request = service.Spreadsheets.Values.BatchUpdate(requestBody, fileId);
+
+        //BatchUpdateValuesResponse response = request.Execute();
+        BatchUpdateValuesResponse response = await request.ExecuteAsync(); // For async 
+
+        return "fin";
+    }
+
+
+    public async Task<IList<IList<object>>> FetchSheetData(string fileId, string range)
+    {
+        try
+        {
+            var sheetService = await GetSheetService();
+
+            SpreadsheetsResource.ValuesResource.GetRequest request =
+                sheetService.Spreadsheets.Values.Get(fileId, range);
+
+    // Executing Read Operation...
+            var response = await request.ExecuteAsync();
+
+            return response.Values;
+
+        }
+        catch (Exception exception)
+        {
+            var test = exception;
+        }
+        return null;
+    }
+
+   public Func<DriveFile,string> converter = p => p?.FileId;
+
+}

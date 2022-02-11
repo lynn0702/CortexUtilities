@@ -148,8 +148,8 @@
             {
                 Title = GetRandomTrait("Title")?.Name,
                 TraitCount = _random.Next(0, 6),
-                PoolQuantity = _random.Next(2, 7),
-                PoolDieSize = _random.Next(3, 7) * 2,
+                PoolQuantity = (_random.Next(1, 4) + _random.Next(1, 4)),
+                PoolDieSize = (_random.Next(1, 4) + _random.Next(2, 4)) * 2,
                 SettingTraits = GetRandomSceneTraits(new[] { "Trait" }, 4).Select(st => st.Name).ToArray()
             };
         scene.SceneTraits = GetRandomSceneTraits(new[] { "Agent", "Asset" }, scene.TraitCount).ToList();
@@ -157,11 +157,11 @@
 
         foreach (var cortexSceneTrait in scene.SceneTraits)
         {
-            cortexSceneTrait.Rating = _random.Next(3, 7) * 2;
+            cortexSceneTrait.Rating = (_random.Next(1, 4) + _random.Next(2, 4)) * 2;
             cortexSceneTrait.HasTrait = _random.Next(0, 2) == 0;
-            cortexSceneTrait.TraitRating = _random.Next(2, 7) * 2;
+            cortexSceneTrait.TraitRating = (_random.Next(1, 4) + _random.Next(1, 4)) * 2;
             cortexSceneTrait.HasAsset = _random.Next(0, 2) == 0;
-            cortexSceneTrait.AssetRating = _random.Next(2, 7) * 2;
+            cortexSceneTrait.AssetRating = (_random.Next(1, 4) + _random.Next(1, 4)) * 2;
 
             cortexSceneTrait.TraitName = scene.SettingTraits[_random.Next(0, 4)];
 

@@ -51,7 +51,7 @@
 
     public CortexTrait GetRandomTrait(string type = null, string subtype = null)
     {
-        if (Data.SceneTraitList == null) return new CortexTrait
+        if (Data.GMCTraitList == null) return new CortexTrait
             {
                 Name = "List Empty"
             };
@@ -85,8 +85,8 @@
         var gmc = new CortexGMC
             {
                 Name = GetRandomTrait("Agent")?.Name,
-                CatalystDieSize = _random.Next(3, 7) * 2,
-                Traits = GetRandomGMCTraits(new[] { "Trait" }, _random.Next(0, 7)).ToList(),
+                CatalystDieSize = (_random.Next(1, 4) + _random.Next(2, 4)) * 2,
+                Traits = GetRandomGMCTraits(new[] { "Trait" }, (_random.Next(0, 4) + _random.Next(0, 4))).ToList(),
                 Distinctions = new List<CortexTrait>()
             };
 
@@ -115,7 +115,7 @@
         //set ratings
         foreach (var cortexTrait in gmc.Traits)
         {
-            cortexTrait.Rating = _random.Next(3, 7) * 2;
+            cortexTrait.Rating = (_random.Next(1, 4) + _random.Next(1, 4)) * 2;
         }
 
         foreach (var cortexTrait in gmc.Distinctions)
