@@ -6,7 +6,7 @@
 @inject StaticData Data
 @inject NavigationManager Navigation
 @inject HttpClient Http
-
+@inject IConfiguration config
 @inject IAccessTokenProvider TokenProvider
 
 @inherits DriveManager
@@ -149,7 +149,7 @@
 
     private async void LoadEidolon()
     {
-        var source = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI/values/SceneTraitsEA!A1:Z1000?key=AIzaSyA_vQ6nmcVJyVmX4VVDFxTCjwy3KTZPcR8");
+        var source = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI/values/SceneTraitsEA!A1:Z1000?key=" + config["googleAPIKey"]);
 
         Data.SceneTraitList = source.values.Select(row => new CortexSceneTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
         Data.SceneTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox

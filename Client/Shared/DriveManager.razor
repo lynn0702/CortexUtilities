@@ -5,7 +5,7 @@
 @using Google.Apis.Drive.v3
 @using Google.Apis.Services
 
-
+@inject IConfiguration config
 @inject HttpClient Http
 @inject IAccessTokenProvider TokenProvider
 
@@ -39,7 +39,7 @@
             return new BaseClientService.Initializer
             {
                 HttpClientInitializer = credential,
-                ApiKey = "AIzaSyAwPqx9N3S7HTuePmZPy0gYx924vY2K9Go", //todo fetch from appsettings?
+                ApiKey = config["googleAPIKey"], 
                 ApplicationName = "Cortex Lynn Jones Rocks",
                 GZipEnabled = false,
 

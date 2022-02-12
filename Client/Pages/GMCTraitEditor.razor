@@ -7,6 +7,7 @@
 
 @inject StaticData Data
 
+@inherits DriveManager
 @inject IHttpClientFactory ClientFactory
 @inject IAccessTokenProvider TokenProvider
 
@@ -137,32 +138,6 @@
     void OnCreateRow(CortexTrait order)
     {
         Data.GMCTraitList.Add(order);
-    }
-
-    private async Task<SheetsService> GetSheetService()
-    {
-        var tokenResult = await TokenProvider.RequestAccessToken(
-            new AccessTokenRequestOptions
-            {
-                Scopes = new[] { "https://www.googleapis.com/auth/drive"}
-            });
-
-        if (tokenResult.TryGetToken(out var token))
-        {
-            GoogleCredential credential = GoogleCredential.FromAccessToken(token.Value).CreateScoped(SheetsService.Scope.Drive);
-
-            SheetsService service = new(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = credential,
-                ApiKey = "AIzaSyAwPqx9N3S7HTuePmZPy0gYx924vY2K9Go",
-                ApplicationName = "",
-                GZipEnabled = false
-            });
-
-            return service;
-        }
-
-        return null;
     }
 
     private async Task LoadTest()
