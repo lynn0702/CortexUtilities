@@ -8,7 +8,6 @@
 @inject StaticData Data
 
 @inherits DriveManager
-@inject IHttpClientFactory ClientFactory
 @inject IAccessTokenProvider TokenProvider
 
 <MudButton Color="Color.Secondary" OnClick="LoadTest">Load Eidolon</MudButton>
@@ -142,18 +141,7 @@
 
     private async Task LoadTest()
     {
-    //try
-    //{
-    //    var client = ClientFactory.CreateClient("GoogleSheets");
 
-    //   var  examples = 
-    //        await client.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1ZIDphYyexhUDj17Dm7ewGxHDq7bAfst-02VmfzmyYaA/values/Sheet13!A1:Z1000");
-    //    var response = SheetPareser.Traits(examples.values);
-    //}
-    //catch (AccessTokenNotAvailableException exception)
-    //{
-    //    exception.Redirect();
-    //}
         try
         {
             var sheetService = await GetSheetService();
