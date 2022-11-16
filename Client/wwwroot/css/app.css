@@ -316,14 +316,19 @@ code {
         height: 1.8em;
     }
 
+.distinctionCard, .sceneCard {
+    max-height: 420px;
+    max-width: 300px;
+    padding: 0px;
+    margin: 0px;
+    width: 100%;
+    box-sizing: border-box;
+    display: grid;
+    gap: 0.1em 0em;
+    border: 2px solid black;
+    border-radius: 5%;
+}
     .sceneCard {
-        max-height: 420px;
-        max-width: 300px;
-        padding: 0px;
-        margin: 0px;
-        width: 100%;
-        box-sizing: border-box;
-        display: grid;
         grid-template-columns: repeat(6, 1fr);
         grid-template-rows: repeat(8, minmax(0, 1fr));
         gap: 0.1em 0em;
@@ -338,9 +343,85 @@ code {
             ". Trait-4 Trait-4 Trait-4 Trait-4-Rating ."
             ". Trait-5 Trait-5 Trait-5 Trait-5-Rating ."
             ". . . . . RightIcon";
-        border: 2px solid black;
-        border-radius: 5%;
     }
+
+
+.distinctionCard {
+    display: grid;
+    align-items: baseline;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 5fr 1fr 6fr 1fr;
+    grid-template-areas:
+        "NameDistinction NameDistinction NameDistinction"
+        "Adjective Adjective ."
+        ". . ."
+        ". Noun Noun"
+        "SFX . ."
+        "StresSlider StresSlider StresSlider";
+    font-size: .8rem;
+}
+
+.NameDistinction {
+    grid-area: 1 / 1 / 2 / 2;
+    font-size: 28px;
+    color: #000;
+    grid-area: NameDistinction;
+    justify-self: start;
+    align-self: start;
+    text-anchor: middle;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 1.3REM;
+    font-family: "Palatino Linotype", Trebuchet MS, Verdana, sans-serif;
+    text-align-last: center;
+    color: black;
+    margin-left: 1rem;
+    height: 100%%;
+    display: grid;
+    grid-auto-flow: row;
+}
+
+.Adjective {
+    grid-area: 2 / 1 / 3 / 2;
+    height: 100%;
+    display: grid;
+    grid-auto-flow: row;
+    margin-left: .2rem;
+    white-space: pre;
+}
+
+.Noun {
+    grid-area: 4 / 3 / 5 / 4;
+    height: 100%;
+    display: grid;
+    align-items: baseline;
+    grid-auto-flow: row;
+    white-space: pre;
+    justify-items: end;
+    margin-right: .2REM;
+}
+
+.SFX {
+    grid-area: 5 / 1 / 6 / 4;
+    height: 100%;
+    display: grid;
+    align-items: baseline;
+    grid-auto-flow: row;
+    margin: .2rem;
+}
+
+.StressSlider {
+    grid-area: 6 / 1 / 7 / 4;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.DistinctionImage {
+    grid-area: 2 / 1 / 5 / 4;
+    height: 100%
+}
 
     .paleWoodGradient {
         background: #eacda3; /* fallback for old browsers */
@@ -659,7 +740,6 @@ code {
         grid-area: Name;
         justify-self: center;
         align-self: center;
-        grid-area: Name;
         text-anchor: middle;
         text-align: center;
         font-weight: bolder;
@@ -674,12 +754,13 @@ code {
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: 1fr;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
         grid-template-rows: 1fr;
         grid-area: Distinctions;
         grid-template-areas:
-            "Distinction-1 Distinction-2"
-            "Distinction-3 Distinction-3";
+            "Distinction-1" 
+            "Distinction-2"
+            "Distinction-3";
         justify-self: center;
         align-self: center;
     }
@@ -725,3 +806,98 @@ code {
     .Distinction-3 {
         grid-area: Distinction-3;
     }
+
+div.rotate {
+    width: 333px;
+    height: 333px;
+    background-color: chocolate;
+    box-sizing: border-box;
+}
+
+.squareCard {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    justify-content: center;
+    align-content: center;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+    font-size: .8rem;
+    font-weight: bold;
+    /*rounded corners with medium solid border*/    
+    border-radius: 5%;
+
+    border:solid;
+    font-family: "Josefin Sans", sans-serif;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.squareTop {
+    grid-area: 1 / 1 / span 1 / span 3;
+    transform: rotate(180deg);
+}
+
+.squareBottom {
+    grid-area: 3 / 1 / span 1 / span 3;
+}
+
+.squareLeft {
+    grid-area: 1 / 1 / span 3 / span 1;
+    /*transform: rotate(90deg) translateX(-100%);
+    transform-origin: bottom left;*/
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+}
+
+.squareRight {
+    grid-area: 1 / 3 / span 3 / span 1;
+    transform: rotate(180deg);
+    writing-mode: vertical-rl;
+    text-orientation: sideways;
+}
+
+
+div.overlap {
+    /*overlap items in fan*/
+    display: flex;
+    width: 500px;
+}
+
+div.paddedSideText {
+    -webkit-print-color-adjust: exact;
+    padding: 5% 5%;
+}
+
+.simplecharacter {
+    display: grid;
+    width: 444px;
+    height: 555px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+}
+
+.agent {
+    grid-area: 1 / 1 / 4 / 4;
+    z-index: 4;
+}
+
+.engine {
+    grid-area: 2 / 1 / 5 / 4;
+    z-index: 3;
+}
+
+.anchor {
+    grid-area: 3 / 2 / 6 / 5;
+    z-index: 1;
+}
+
+.conflict {
+    grid-area: 2 / 2 / 5 / 5;
+    z-index: 2;
+}

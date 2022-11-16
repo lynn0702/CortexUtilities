@@ -1,0 +1,142 @@
+﻿@using System.ComponentModel
+@using System.IO.IsolatedStorage
+@using System.CodeDom.Compiler
+
+@inject StaticData _sData
+
+<div class="card-container">
+    <div class="card-flip @FlipCss">
+        <div class="distinctionCard paleWoodGradient card front " @onclick="FlipMe">
+
+            <div class="NameDistinction">
+                Name:
+            </div>
+            <div class="DistinctionImage">
+                <div style="align-items: center;
+                            display: flex;
+                            flex-direction: column;
+                            height: 10rem;
+                            width: 10rem;
+                            justify-content: center;
+                            padding: 8px;
+/*                            border-radius: 50%;
+                            border-style: solid;*/
+                            position: absolute;
+                            left: 50%;
+                            top: 30%;
+                            transform: translate(-50%, -50%);
+                            background-image: url(@("images/faces/"+@Face));
+                        "></div>
+
+            </div>
+            <div class="Adjective">
+                <text>@Distinction.Adjective</text>
+                <text style="font-style: italic;"> @_sData.DistinctionTraitList.FirstOrDefault(d => d.RelatedTo == Distinction.Adjective && d.Type == "Description")?.Name </text>
+            </div>
+            <div class="Noun">
+                <text>@Distinction.Noun</text>
+                <text style="font-style: italic;"> @_sData.DistinctionTraitList.FirstOrDefault(d => d.RelatedTo == Distinction.Noun && d.Type == "Description")?.Name </text>
+
+            </div>
+            <div class="SFX">
+                @{
+                    for (var i = 0; i < Distinction.SFXs.Count; i++)
+                    {
+                        <div>
+                         <MudIcon Icon="@Icons.Material.Outlined.Circle" Size="Size.Small"></MudIcon> @Distinction.SFXs.ElementAt(i).Name
+                        </div>
+                    }
+                }
+                </div>
+            <div class="StressSlider">
+                <CortexDice die="4"></CortexDice>
+                <CortexDice die="6"></CortexDice>
+                <CortexDice die="8"></CortexDice>
+                <CortexDice die="10"></CortexDice>
+                <CortexDice die="12"></CortexDice>
+            </div>
+        </div>
+
+        <!-- Card 2 Back -->
+        <div class="sceneCardBack paleWoodGradient card back @(!_flipped ? "clickThrough": "")" @onclick="FlipMe">
+            <figure style="align-self:center">
+                <img src="images/pokerKCKCBack.svg" alt="door" />
+            </figure>
+        </div>
+        <!-- End Card 2 Back -->
+
+    </div>
+</div>
+
+@code {
+    Random _random = new Random();
+    DistinctionWithSFX Distinction { get; set; }
+    string Face { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Distinction = Generate();
+        Face = _sData.Faces.GetRandomFace();
+        base.OnInitialized();
+    }
+
+    public CortexTrait GetRandomTrait(string type, string subtype = null)
+    {
+        if (_sData.DistinctionTraitList == null) return new CortexTrait
+            {
+                Name = "List Empty"
+            };
+
+        var c = _sData.DistinctionTraitList.Count == 0 ? 0 : _sData.DistinctionTraitList.Count - 1;
+
+        if (string.IsNullOrEmpty(type)) return _sData.DistinctionTraitList.ElementAtOrDefault(_random.Next(0, c));
+
+        var list = subtype ==  null ?  _sData.DistinctionTraitList.Where(t => t.Type == type).ToArray() :
+            _sData.DistinctionTraitList.Where(t => t.Type == type && t.Subtype == subtype).ToArray()
+            ;
+        c = !list.Any() ? 0 : list.Count() - 1;
+
+        return list.ElementAtOrDefault(_random.Next(0, c));
+    }
+
+    private IEnumerable<CortexTrait> GetRandomTraits(string[] types, int count)
+    {
+        if (_sData.DistinctionTraitList == null) return new List<CortexTrait>();
+
+        return types.Length == 0
+            ? _sData.DistinctionTraitList.GetRandomElements(count)
+            : _sData.DistinctionTraitList.Where(t => types.Contains(t.Type)).GetRandomElements(count);
+    }
+
+    bool _flipped = true;
+    public void FlipMe()
+    {
+        _flipped = !_flipped;
+        StateHasChanged();
+    }
+    string FlipCss => _flipped ? "im-flipped" : "";
+
+    public DistinctionWithSFX Generate()
+    {
+        var distinction = new DistinctionWithSFX
+            {
+                Noun = GetRandomTrait("Distinction", "Noun")?.Name,
+                Adjective = GetRandomTrait("Distinction", "Adjective")?.Name,
+                SFXs = new List<CortexTrait>()
+            };
+
+        distinction.SFXs.AddRange(_sData.DistinctionTraitList
+            .Where(t => t.Type == "SFX" && (t.RelatedTo == distinction.Adjective || distinction.Noun == t.RelatedTo)).ToList().GetRandomElements(3) );
+
+        return distinction;
+    }
+
+    public void ReGenerate()
+    {
+        Distinction = Generate();
+        Face = _sData.Faces.GetRandomFace();
+        StateHasChanged();
+    }
+
+}
+

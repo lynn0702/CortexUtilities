@@ -1,0 +1,38 @@
+﻿<text>@Name</text>
+@inject HttpClient _http
+
+@code {
+    string Name { get; set; }
+    Random _random = new Random();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Name = await Generate();
+
+       await base.OnInitializedAsync();
+    }
+
+    private async Task<string> Generate()
+    {
+        try
+        {
+            var huh = await _http.GetAsync("https://names.drycodes.com/1?nameOptions=girl_names&");
+
+
+            var test = _random.Next(1, 3) % 2 == 0;
+
+            var response = test ? await _http.GetStringAsync("https://names.drycodes.com/1?nameOptions=girl_names&")
+                : await _http.GetStringAsync("https://names.drycodes.com/1?nameOptions=boy_names&");
+
+            Name = response.Split('_')[0];
+
+            return Name;
+        }
+        catch (Exception exception)
+        {
+            Name = "Name:";
+        }
+        return Name;
+    }
+
+}

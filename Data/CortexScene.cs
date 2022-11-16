@@ -14,9 +14,5 @@ namespace Data
         public int TraitCount { get; set; }
 
         public IList<CortexSceneTrait> SceneTraits { get; set; }
-
-
-
-
     }
 }

@@ -446,6 +446,8 @@ namespace Data
         };
 
         public SVGFaces Faces = new();
+
+        public List<CortexTrait> DistinctionTraitList = new();
     }
 
     public static class StaticDataExtensions

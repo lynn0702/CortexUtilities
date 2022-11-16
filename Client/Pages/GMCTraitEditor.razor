@@ -6,11 +6,23 @@
 @using Google.Apis.Services
 
 @inject StaticData Data
-
+@inject HttpClient Http
 @inherits DriveManager
+@inject IConfiguration config
 @inject IAccessTokenProvider TokenProvider
 
-<MudButton Color="Color.Secondary" OnClick="LoadTest">Load Eidolon</MudButton>
+<MudButton Color="Color.Secondary" OnClick="LoadEidolon">Load Eidolon</MudButton>
+@if (_driveFiles != null)
+{
+    <MudSelect T="DriveFile" @bind-Value="@_selectedFile" ToStringFunc="@converter" Label="Select your file" AnchorOrigin="Origin.BottomCenter" Variant="MudBlazor.Variant.Outlined" Clearable>
+        @foreach (var item in _driveFiles)
+        {
+            <MudSelectItem Value="@item">@item.Name</MudSelectItem>
+        }
+    </MudSelect>
+    <MudButton Color="Color.Secondary" OnClick="LoadUserData">Load Selected</MudButton>
+}
+<MudButton Color="Color.Secondary" OnClick="CreateSheet">Create Sheet</MudButton>
 
 
 <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New GMC Trait" Click="@InsertRow" Disabled=@(traitToInsert != null) />
@@ -64,6 +76,8 @@
     RadzenDataGrid<CortexTrait> traitsGrid;
 
     string[] TraitTypes { get; set; }
+
+    DriveFile _selectedFile;
 
     protected override void OnInitialized()
     {
@@ -139,29 +153,22 @@
         Data.GMCTraitList.Add(order);
     }
 
-    private async Task LoadTest()
+    private async void LoadEidolon()
     {
+        var source = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI/values/GMCTraitsEA!A1:Z1000?key=" + config["googleAPIKey"]);
 
-        try
-        {
-            var sheetService = await GetSheetService();
+        Data.GMCTraitList = source.values.Select(row => new CortexTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+        Data.GMCTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
 
-            var range = $"GMC Traits EA!A:C";
-            SpreadsheetsResource.ValuesResource.GetRequest request =
-                sheetService.Spreadsheets.Values.Get("1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI", range);
-    // Executing Read Operation...
-            var response = await request.ExecuteAsync();
-     
-            Data.GMCTraitList = response.Values.Select(row => new CortexTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
-            Data.GMCTraitList.RemoveAt(0);
+        StateHasChanged();
+    }
 
-            StateHasChanged();
-    //var test2 = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1ZIDphYyexhUDj17Dm7ewGxHDq7bAfst-02VmfzmyYaA/values/Sheet13!A1:Z1000?key=AIzaSyA_vQ6nmcVJyVmX4VVDFxTCjwy3KTZPcR8");
+    private async void LoadUserData()
+    {
+        var source = await FetchSheetData(_selectedFile.FileId, "A:D"); 
+        Data.GMCTraitList = source.Select(row => new CortexTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+        Data.GMCTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
 
-        }
-        catch (Exception exception)
-        {
-            var test = exception;
-        }
+        StateHasChanged();
     }
 }

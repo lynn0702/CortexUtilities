@@ -1,4 +1,4 @@
-﻿@page "/scenetraiteditor"
+﻿@page "/distinctiontraiteditor"
 @using DataGridEditMode = Radzen.DataGridEditMode
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Color = MudBlazor.Color
@@ -11,7 +11,6 @@
 
 @inherits DriveManager
 
-<MudButton Color="Color.Secondary" OnClick="LoadEidolon">Load Eidolon</MudButton>
 @if (_driveFiles != null)
 {
     <MudSelect T="DriveFile" @bind-Value="@_selectedFile" ToStringFunc="@converter" Label="Select your file" AnchorOrigin="Origin.BottomCenter" Variant="MudBlazor.Variant.Outlined" Clearable>
@@ -25,27 +24,40 @@
 }
 <MudButton Color="Color.Secondary" OnClick="CreateSheet">New Sheet</MudButton>
 
-<MudOverlay Visible="isOverlayVisible" DarkBackground="true" Absolute="true">
+<MudOverlay Visible="_isOverlayVisible" DarkBackground="true" Absolute="true">
     <MudProgressCircular Color="Color.Secondary" Indeterminate="true" />
 </MudOverlay>
 
-<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Scene Trait" Click="@InsertRow" Disabled="@(traitToInsert != null)" />
-    <RadzenDataGrid @ref="scenetraitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
-                Data="@Data.SceneTraitList" TItem="CortexSceneTrait" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Distinction Trait" Click="@InsertRow" Disabled="@(traitToInsert != null)" />
+    <RadzenDataGrid @ref="_distinctionTraitsGrid" AllowFiltering="true" AllowPaging="true" PageSize="5" AllowSorting="true" EditMode="DataGridEditMode.Single"
+                Data="@Data.DistinctionTraitList" TItem="CortexTrait" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
         <Columns>
-            <RadzenDataGridColumn TItem="CortexSceneTrait" Property="Name" Title="Name">
+            <RadzenDataGridColumn TItem="CortexTrait" Property="Name" Title="Name">
                 <EditTemplate Context="order">
                     <RadzenTextBox @bind-Value="order.Name" Style="width:100%; display: block" Name="Name" />
                     <RadzenRequiredValidator Text="Name is required" Component="Name" Popup="true" />
                 </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="CortexSceneTrait" Property="Type" Title="Type" Width="280px" >
+            <RadzenDataGridColumn TItem="CortexTrait" Property="Type" Title="Type" Width="280px" >
                 <EditTemplate Context="order">
-                    <RadzenDropDown @bind-Value="order.Type" Data="@traitTypes" TextProperty="Type" ValueProperty="Type" Style="width:100%; display: block;" />
+                    <RadzenDropDown @bind-Value="order.Type" Data="@_traitTypes" TextProperty="Type" ValueProperty="Type" Style="width:100%; display: block;" />
+                    <RadzenRequiredValidator Text="Type is required" Component="Name" Popup="true" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="CortexTrait" Property="Subtype" Title="Subtype" Width="280px" >
+                <EditTemplate Context="order">
+                    <RadzenDropDown @bind-Value="order.Type" Data="@_traitSubtypes" TextProperty="Subtype" ValueProperty="Subtype" Style="width:100%; display: block;" />
+                </EditTemplate>
+            </RadzenDataGridColumn>
+            
+            <RadzenDataGridColumn TItem="CortexTrait" Property="RelatedTo" Title="RelatedTo">
+                <EditTemplate Context="order">
+                    <RadzenTextBox @bind-Value="order.RelatedTo" Style="width:100%; display: block" Name="RelatedTo" />
                 </EditTemplate>
             </RadzenDataGridColumn>
 
-            <RadzenDataGridColumn TItem="CortexSceneTrait" Context="sampleBlazorModelsSampleOrder" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+            <RadzenDataGridColumn TItem="CortexTrait" Context="sampleBlazorModelsSampleOrder" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
 @*                <Template Context="order">
                     <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => EditRow(order))" @onclick:stopPropagation="true">
                     </RadzenButton>
@@ -57,7 +69,7 @@
                     </RadzenButton>
                 </EditTemplate>
             </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="CortexSceneTrait" Context="order" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+            <RadzenDataGridColumn TItem="CortexTrait" Context="order" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
                 <Template Context="order">
                     <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Small" Class="m-1" Click="@(args => DeleteRow(order))" @onclick:stopPropagation="true">
                     </RadzenButton>
@@ -71,26 +83,28 @@
     </RadzenDataGrid>
 
 @code {
-    RadzenDataGrid<CortexSceneTrait> scenetraitsGrid;
-    private bool isOverlayVisible;
+    RadzenDataGrid<CortexTrait> _distinctionTraitsGrid;
+    private bool _isOverlayVisible;
 
     string fileId = "";
 
     DriveFile _selectedFile;
 
-    string[] traitTypes = new[] {"Title", "Agent", "Asset", "Trait"};
+    readonly string[] _traitTypes = new[] {"Distinction", "Description", "SFX"};
+
+    readonly string[] _traitSubtypes = new[] {"Noun", "Adjective", "Preposition"};
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
     }
 
-    async Task EditRow(CortexSceneTrait order)
+    async Task EditRow(CortexTrait order)
     {
-        await scenetraitsGrid.EditRow(order);
+        await _distinctionTraitsGrid.EditRow(order);
     }
 
-    void OnUpdateRow(CortexSceneTrait order)
+    void OnUpdateRow(CortexTrait order)
     {
         if (order == traitToInsert)
         {
@@ -98,95 +112,81 @@
         }
     }
 
-    async Task SaveRow(CortexSceneTrait order)
+    async Task SaveRow(CortexTrait order)
     {
         if (order == traitToInsert)
         {
             traitToInsert = null;
         }
 
-        Data.SceneTraitList.Add(order);
+        Data.DistinctionTraitList.Add(order);
 
-        await scenetraitsGrid.UpdateRow(order);
+        await _distinctionTraitsGrid.UpdateRow(order);
     }
 
-    void CancelEdit(CortexSceneTrait order)
+    void CancelEdit(CortexTrait order)
     {
         if (order == traitToInsert)
         {
             traitToInsert = null;
         }
 
-        scenetraitsGrid.CancelEditRow(order);
+        _distinctionTraitsGrid.CancelEditRow(order);
     }
 
-    async Task DeleteRow(CortexSceneTrait order)
+    async Task DeleteRow(CortexTrait order)
     {
         if (order == traitToInsert)
         {
             traitToInsert = null;
         }
 
-        if (Data.SceneTraitList.Contains(order))
+        if (Data.DistinctionTraitList.Contains(order))
         {
-            Data.SceneTraitList.Remove(order);
+            Data.DistinctionTraitList.Remove(order);
 
-            await scenetraitsGrid.Reload();
+            await _distinctionTraitsGrid.Reload();
         }
         else
         {
-            scenetraitsGrid.CancelEditRow(order);
+            _distinctionTraitsGrid.CancelEditRow(order);
         }
     }
 
-    CortexSceneTrait traitToInsert;
+    CortexTrait traitToInsert;
 
     async Task InsertRow()
     {
-        traitToInsert = new CortexSceneTrait();
-        await scenetraitsGrid.InsertRow(traitToInsert);
+        traitToInsert = new CortexTrait();
+        await _distinctionTraitsGrid.InsertRow(traitToInsert);
     }
 
-    void OnCreateRow(CortexSceneTrait order)
+    void OnCreateRow(CortexTrait order)
     {
-        Data.SceneTraitList.Add(order);
+        Data.DistinctionTraitList.Add(order);
 
-    }
-
-    private async void LoadEidolon()
-    {
-        isOverlayVisible = true;
-        var source = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI/values/SceneTraitsEA!A1:Z1000?key=" + config["googleAPIKey"]);
-
-        Data.SceneTraitList = source.values.Select(row => new CortexSceneTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
-        Data.SceneTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
-
-    
-        isOverlayVisible = false;
-        StateHasChanged();
     }
 
     private async void LoadUserData()
     {
-        isOverlayVisible = true;
+        _isOverlayVisible = true;
         var source = await FetchSheetData(_selectedFile.FileId, "A:D"); 
-        Data.SceneTraitList = source.Select(row => new CortexSceneTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
-        Data.SceneTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
+        Data.DistinctionTraitList = source.Select(row => new CortexTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+        Data.DistinctionTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
 
-        isOverlayVisible = false;
+        _isOverlayVisible = false;
         StateHasChanged();
     }
 
     private async void LoadPublicUri()
     {
-        isOverlayVisible = true;
+        _isOverlayVisible = true;
         var source = await Http.GetFromJsonAsync<SheetAPIResponse>("https://sheets.googleapis.com/v4/spreadsheets/1H-FmRXtfDV806OrWqH_u5YC6TPmpQZCiuMHsGF8RvqI/values/A:C?key=" + config["googleAPIKey"]);
 
-        Data.SceneTraitList = source.values.Select(row => new CortexSceneTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
-        Data.SceneTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
+        Data.DistinctionTraitList = source.values.Select(row => new CortexTrait(row.Where(o => o != null).Select(o => o.ToString()).ToArray())).ToList();
+        Data.DistinctionTraitList.RemoveAt(0); //remove header, todo make a variable/checkbox
 
-  
-        isOverlayVisible = false;
+        _isOverlayVisible = false;
         StateHasChanged();
     }
 

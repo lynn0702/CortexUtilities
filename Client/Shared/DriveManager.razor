@@ -3,11 +3,14 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using Google.Apis.Auth.OAuth2
 @using Google.Apis.Drive.v3
+@using Google.Apis.Drive.v3.Data
 @using Google.Apis.Services
+@using System.Text.Json
 
 @inject IConfiguration config
 @inject HttpClient Http
 @inject IAccessTokenProvider TokenProvider
+@inject IJSRuntime jsRuntime
 
 @code {
     public List<DriveFile> _driveFiles;
@@ -17,12 +20,12 @@
          _driveFiles = await GetDriveFiles();
     }
 
-    private async Task<List<DriveFile>> GetDriveFiles()
+    public async Task<List<DriveFile>> GetDriveFiles(string cardType = null)
     {
         var drive = await GetDriveService();
 
         var list = await drive.Files.List().ExecuteAsync();
-        return list.Files.Select(f => new DriveFile {Name = f.Name, FileId = f.Id}).ToList();
+        return list.Files.Where(f => cardType == null || f.AppProperties["cardType"] == cardType) .Select(f => new DriveFile {Name = f.Name, FileId = f.Id}).ToList();
     }
 
     private async Task<BaseClientService.Initializer> GetDriveInitializer()
@@ -97,7 +100,7 @@
                         }
                     };
 
-                    var sheet =  service.Spreadsheets.Values.Update(valueRange, fileId,"SceneTraitsEA!A1:C1");
+                    var sheet =  service.Spreadsheets.Values.Update(valueRange, fileId,"A1:C1");
 
                     sheet.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
 
@@ -106,6 +109,8 @@
             _driveFiles = await GetDriveFiles();
 
             StateHasChanged();
+
+            await jsRuntime.InvokeVoidAsync("open", "https://docs.google.com/spreadsheets/d/"+fileId, "_blank");
 
                 return fileId;
             }
@@ -116,7 +121,52 @@
             }
     }
 
+        //creates a new sheet which is inside drive.file scope, returns fileid
+    public  async Task<string> SaveJsonFile(string title, string jsonContents, string cardType, string id = null){
+        const string mimeType = "application/vnd.google-apps.script+json";
+        try
+        {
+            var service = await GetDriveService();
 
+            var newFile = new File()
+                    {
+                        Name = title,
+                        MimeType = mimeType,
+                        AppProperties = new Dictionary<string, string>
+                        {
+                            {"cardType",cardType}
+                        }
+                    };
+
+            await using(var ms = new MemoryStream(System.Text.Encoding.ASCII.GetBytes(jsonContents)))
+            {
+                if (id == null)
+                {
+                    var createRequest = service.Files.Create(newFile, ms, mimeType);
+
+                    var createResults = await createRequest.UploadAsync(CancellationToken.None);
+                }
+                var updateRequest =   service.Files.Update(newFile, id, ms, mimeType);
+
+                var updateResults = await updateRequest.UploadAsync(CancellationToken.None);
+            }
+
+            var fileId = newFile.Id;
+
+              
+            _driveFiles = await GetDriveFiles();
+
+            StateHasChanged();
+
+            return fileId;
+            }
+            catch (Exception exception)
+            {
+                var test = exception;
+                
+                throw;
+            }
+    }
 
     // Pass in your data as a list of a list (2-D lists are equivalent to the 2-D spreadsheet structure)
     public async Task<string> CopySheetData(SheetAPIResponse source, string fileId) { 
@@ -164,6 +214,15 @@
             var test = exception;
         }
         return null;
+    }
+
+    public async Task<string> GetJsonFile(string fileId)
+    {
+        var service = await GetDriveService();
+        var getRequest = service.Files.Export(fileId, "text/plain");
+        var file = await  service.Files.Export(fileId, "text/plain").ExecuteAsync();
+
+        return file;
     }
 
    public Func<DriveFile,string> converter = p => p?.FileId;

@@ -1,0 +1,31 @@
+﻿
+<!-- square which rotates on click and has text on the inner edges -->
+
+<div class="rotate squareCard" style="rotate(@(orientation)deg) !important;"  @onclick="Rotate">
+    <div class="squareBottom">@cardText[GetTextPositon(3)]</div>
+    <div class="squareLeft paddedSideText ">@cardText[GetTextPositon(2)]</div>
+    <div class="squareTop paddedSideText ">@cardText[GetTextPositon(1)]</div>
+    <div class="squareRight">@cardText[GetTextPositon(0)]</div>
+</div>
+
+@code {
+    private int orientation { get; set; } = 0;
+
+    private string[] cardText { get; set; } = new string[]{"A Game Master","A Writer","A Teacher","A Storyteller"};
+
+    void Rotate()
+    {
+        orientation += 90;
+        orientation = orientation == 360 ? 0 : orientation;
+        StateHasChanged();
+        return;
+    }
+
+    int GetTextPositon(int startingPosition)
+    {
+        var textPosition = (startingPosition + (orientation / 90)) >= 4 ? (startingPosition + (orientation / 90)) - 4 : startingPosition + (orientation / 90);
+
+        return textPosition; 
+    }
+
+}
